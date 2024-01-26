@@ -53,5 +53,7 @@ namespace NVL_App
 			inline string& GetName() { return _name; }
 			inline TriggerMode& GetTriggerMode() { return _triggerMode; }
 			inline bool GetIsMaster() { return _isMaster; }
+		private:
+			Handle * GetHandle(const string& name);
 	};
 }

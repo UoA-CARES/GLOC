@@ -85,3 +85,44 @@ int Camera::GetHeight()
 {
 	throw runtime_error("Not implemented");
 }
+
+//--------------------------------------------------
+// Helper Functionality
+//--------------------------------------------------
+
+/**
+ * Add the logic to get a 'handle' to the camera in question
+ * @param name The name of the camera
+*/
+Camera::Handle * Camera::GetHandle(const string& name) 
+{
+	// Create a factory
+	auto& factory = Pylon::CTlFactory::GetInstance();
+
+	// Get the list of attached devices
+	auto devices = Pylon::DeviceInfoList_t(); factory.EnumerateDevices(devices);
+
+	// Create a value to hold the result
+	auto found = (Pylon::CDeviceInfo *) nullptr;
+
+	// Find the device that has the name that we are looking for
+	for (auto& device : devices) 
+	{
+		if (device.GetUserDefinedName().c_str() == name) 
+		{
+			found = &device; break;
+		}
+	}
+
+	// Check to see if a camera was found
+	if (found == nullptr) throw runtime_error("Unable to find a camera with the given name");
+
+	// Create the camera handle
+	auto result = new Camera::Handle();
+	result->Attach(factory.CreateDevice(*found));
+	result->MaxNumBuffer = 1;
+	result->Open();
+
+	// Return the result
+	return result;
+}
