@@ -40,4 +40,4 @@ add_executable(BCamera
 )
 
 # Add link libraries                               
-target_link_libraries(BCamera NVLib ${OpenCV_LIBS} OpenSSL::SSL uuid)
+target_link_libraries(BCamera NVLib ${OpenCV_LIBS} pylonbase GenApi_gcc_v3_1_Basler_pylon GCBase_gcc_v3_1_Basler_pylon OpenSSL::SSL uuid)

@@ -34,12 +34,11 @@ namespace NVL_App
 
 		private:
 			Handle * _handle;
-			string _id;
 			string _name;
 			TriggerMode _triggerMode;
 			bool _isMaster;
 		public:
-			Camera(Handle * handle, const string& id, const string& name, TriggerMode& triggerMode, bool isMaster);
+			Camera(const string& name, TriggerMode triggerMode, bool isMaster);
 			~Camera();
 
 			Mat Capture(int timeout);
@@ -49,7 +48,6 @@ namespace NVL_App
 			int GetWidth();
 			int GetHeight();
 
-			inline string& GetId() { return _id; }
 			inline string& GetName() { return _name; }
 			inline TriggerMode& GetTriggerMode() { return _triggerMode; }
 			inline bool GetIsMaster() { return _isMaster; }

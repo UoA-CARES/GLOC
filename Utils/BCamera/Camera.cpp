@@ -15,19 +15,13 @@ using namespace NVL_App;
 
 /**
  * @brief Initializer Constructor
- * @param handle Initialize variable <handle>
- * @param id Initialize variable <id>
  * @param name Initialize variable <name>
  * @param triggerMode Initialize variable <triggerMode>
  * @param isMaster Initialize variable <isMaster>
  */
-Camera::Camera(Handle * handle, const string& id, const string& name, TriggerMode& triggerMode, bool isMaster)
+Camera::Camera(const string& name, TriggerMode triggerMode, bool isMaster) : _name(name), _triggerMode(triggerMode), _isMaster(isMaster)
 {
-	_handle = handle;
-	_id = id;
-	_name = name;
-	_triggerMode = triggerMode;
-	_isMaster = isMaster;
+	_handle = GetHandle(name);
 }
 
 /**
@@ -35,7 +29,9 @@ Camera::Camera(Handle * handle, const string& id, const string& name, TriggerMod
  */
 Camera::~Camera()
 {
-	// TODO: Add Teardown logic here
+	auto device = _handle->DetachDevice();
+	device->Close();
+	delete device;
 }
 
 //--------------------------------------------------
