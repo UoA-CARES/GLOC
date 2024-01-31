@@ -16,10 +16,8 @@ using namespace NVL_App;
 /**
  * @brief Initializer Constructor
  * @param name Initialize variable <name>
- * @param triggerMode Initialize variable <triggerMode>
- * @param isMaster Initialize variable <isMaster>
  */
-Camera::Camera(const string& name, TriggerMode triggerMode, bool isMaster) : _name(name), _triggerMode(triggerMode), _isMaster(isMaster)
+Camera::Camera(const string& name) : _name(name)
 {
 	_handle = GetHandle(name);
 }
@@ -29,9 +27,7 @@ Camera::Camera(const string& name, TriggerMode triggerMode, bool isMaster) : _na
  */
 Camera::~Camera()
 {
-	auto device = _handle->DetachDevice();
-	device->Close();
-	delete device;
+	// Extra termination logic can go here!
 }
 
 //--------------------------------------------------
@@ -45,19 +41,22 @@ Camera::~Camera()
  */
 Mat Camera::Capture(int timeout)
 {
-	throw runtime_error("Not implemented");
-}
+	// Declare working variables
+	auto grabResult = Pylon::CGrabResultPtr();
+	auto pylonImage = Pylon::CPylonImage();
+	auto formatConverter = Pylon::CImageFormatConverter(); formatConverter.OutputPixelFormat = Pylon::PixelType_BGR8packed;
 
-//--------------------------------------------------
-// Trigger
-//--------------------------------------------------
+	// Grab an associated image
+	_handle->RetrieveResult(timeout, grabResult);
 
-/**
- * @brief Add the logic to trigger the camera
- */
-void Camera::Trigger()
-{
-	throw runtime_error("Not implemented");
+	// handles checking and confirmation of the grab
+	if (grabResult->GrabSucceeded()) 
+	{
+		formatConverter.Convert(pylonImage, grabResult);
+		Mat image = Mat_<Vec3b>(grabResult->GetHeight(), grabResult->GetWidth(), (Vec3b *)pylonImage.GetBuffer());
+		return image.clone();
+	}
+	else throw runtime_error("Unable to successfully capture an image");
 }
 
 //--------------------------------------------------
@@ -70,7 +69,7 @@ void Camera::Trigger()
  */
 int Camera::GetWidth()
 {
-	throw runtime_error("Not implemented");
+	return _handle->Width.GetMax();
 }
 
 /**
@@ -79,7 +78,7 @@ int Camera::GetWidth()
  */
 int Camera::GetHeight()
 {
-	throw runtime_error("Not implemented");
+	return _handle->Height.GetMax();
 }
 
 //--------------------------------------------------
@@ -118,6 +117,12 @@ Camera::Handle * Camera::GetHandle(const string& name)
 	result->Attach(factory.CreateDevice(*found));
 	result->MaxNumBuffer = 1;
 	result->Open();
+
+	result->TriggerMode.SetValue(Basler_UsbCameraParams::TriggerMode_Off);
+	result->BalanceWhiteAuto.SetValue(Basler_UsbCameraParams::BalanceWhiteAutoEnums::BalanceWhiteAuto_Continuous);
+	result->GainAuto.SetValue(Basler_UsbCameraParams::GainAutoEnums::GainAuto_Continuous);
+	result->ExposureAuto.SetValue(Basler_UsbCameraParams::ExposureAuto_Continuous);
+	result->StartGrabbing();
 
 	// Return the result
 	return result;

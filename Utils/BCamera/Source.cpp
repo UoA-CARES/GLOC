@@ -6,6 +6,7 @@
 // @date: 2024-01-23
 //--------------------------------------------------
 
+#include <unistd.h>
 #include <iostream>
 using namespace std;
 
@@ -46,8 +47,16 @@ void Run(NVLib::Parameters * parameters)
     logger.Log(1, "Starting Pylon");
     Pylon::PylonInitialize();
 
-    logger.Log(1, "Setup the given camera");
-    auto camera = NVL_App::Camera("left", NVL_App::Camera::TriggerMode::TRIGGER_MODE_ASYNC, true);
+    logger.Log(1, "Setup cameras");
+    auto leftCamera = NVL_App::Camera("left");
+    auto rightCamera = NVL_App::Camera("right");
+
+    logger.Log(1, "Performing image capture");
+    Mat leftImage = leftCamera.Capture(1000);
+    Mat rightImage = rightCamera.Capture(1000);
+
+    logger.Log(1, "Saving the images to disk");
+    imwrite("left.png", leftImage); imwrite("right.png", rightImage);
 
     logger.Log(1, "Tear Down Pylon");
     Pylon::PylonTerminate();
