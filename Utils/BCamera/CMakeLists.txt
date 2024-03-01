@@ -22,6 +22,10 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 # Include OpenSSL
 find_package(OpenSSL REQUIRED)
 
+# Add Pylon to the project
+include_directories(/opt/pylon/include)
+link_directories(/opt/pylon/lib)
+
 # Add the NVLib library to the folder
 add_library(NVLib STATIC IMPORTED)
 set_target_properties(NVLib PROPERTIES
@@ -32,7 +36,8 @@ set_target_properties(NVLib PROPERTIES
 # Create the executable
 add_executable(BCamera
     Source.cpp
+    Camera.cpp
 )
 
 # Add link libraries                               
-target_link_libraries(BCamera NVLib ${OpenCV_LIBS} OpenSSL::SSL uuid)
+target_link_libraries(BCamera NVLib ${OpenCV_LIBS} pylonutility pylonbase GenApi_gcc_v3_1_Basler_pylon GCBase_gcc_v3_1_Basler_pylon OpenSSL::SSL uuid)

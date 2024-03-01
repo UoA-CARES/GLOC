@@ -6,6 +6,7 @@
 // @date: 2024-01-23
 //--------------------------------------------------
 
+#include <unistd.h>
 #include <iostream>
 using namespace std;
 
@@ -16,6 +17,7 @@ using namespace std;
 #include <opencv2/opencv.hpp>
 using namespace cv;
 
+#include "Camera.h"
 #include "ArgReader.h"
 
 //--------------------------------------------------
@@ -37,10 +39,27 @@ void Run(NVLib::Parameters * parameters)
 
     logger.StartApplication();
 
-    // Create a helper for path tracking
+    logger.Log(1, "Setup the path helper");
     auto database = NVL_Utils::ArgReader::ReadString(parameters, "database");
     auto dataset = NVL_Utils::ArgReader::ReadString(parameters, "dataset");
     auto pathHelper = NVLib::PathHelper(database, dataset);
+
+    logger.Log(1, "Starting Pylon");
+    Pylon::PylonInitialize();
+
+    logger.Log(1, "Setup cameras");
+    auto leftCamera = NVL_App::Camera("left");
+    auto rightCamera = NVL_App::Camera("right");
+
+    logger.Log(1, "Performing image capture");
+    Mat leftImage = leftCamera.Capture(1000);
+    Mat rightImage = rightCamera.Capture(1000);
+
+    logger.Log(1, "Saving the images to disk");
+    imwrite("left.png", leftImage); imwrite("right.png", rightImage);
+
+    logger.Log(1, "Tear Down Pylon");
+    Pylon::PylonTerminate();
 
     logger.StopApplication();
 }
@@ -64,6 +83,11 @@ int main(int argc, char ** argv)
         parameters = NVL_Utils::ArgReader::GetParameters(argc, argv);
         Run(parameters);
     }
+    catch (const Pylon::GenericException& e) 
+    {
+       std::cerr << "An exception occurred: " << e.GetDescription() << std::endl;
+       exit(EXIT_FAILURE); 
+    }
     catch (runtime_error exception)
     {
         cerr << "Error: " << exception.what() << endl;
@@ -74,6 +98,7 @@ int main(int argc, char ** argv)
         cerr << "Error: " << exception << endl;
         exit(EXIT_FAILURE);
     }
+
 
     if (parameters != nullptr) delete parameters;
 
