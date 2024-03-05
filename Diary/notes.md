@@ -1,9 +1,16 @@
 # Diary Notes #
 
-| Author: WildBoar   |
-|--------------------|
-| Date: 1 March 2024 |
-| Version: 1.00      |
+**Diary Nodes**
+
+**05 March 2024**
+
+So I am working towards distortion estimation from images. The first step is to do this with synthetic images. Therefore, the following steps are next:
+
+* Generate points based on a configuration file.
+* Attempt to estimate the distortion and remove the distortion from the points
+* Perform a calibration on the undistorted points and see the effect.
+
+**01 March 2024**
 
 Light travels in a straight line, therefore you would expect optical models to be linear equations. This is true, mostly, but there is a component called _distortion_ that is non-linear. Distortion exists because lenses bend the light, as well as many real-world physical effects such as refraction. This non-linear aspect is essentially undesirable because it greatly complicates mathematical optimization, and many optical models are developed precisely for the purpose of solving optimization problems. 
 
@@ -13,5 +20,5 @@ Our purpose, in this work, is to develop a camera calibration tool. Traditional 
 * If only distortion removal is required, there is no need to calculate camera parameters.
 * Distortion can be more explicily optimized as a force of non-linearity in the system, rather than an explanation of error with respect to the linear equations.
 
-My first step in this research is to revisit the problem of grid-based distortion estimation. In my PhD thesis, I solved this problem using a traditional Levenberg-Marquardt iterative optimizer
+My first step in this research is to revisit the problem of grid-based distortion estimation. In my PhD thesis, I solved this problem using a traditional Levenberg-Marquardt iterative optimizer.
 
