@@ -6,21 +6,21 @@
 # @Date Created: 2024-03-05
 #--------------------------------------------------------
 
-# Create the main application
 cmake_minimum_required(VERSION 3.0.0)
 project(PointGen VERSION 0.1.0)
 
-# Enable Testing
-enable_testing()
+# Set the base path of the libraries
+set(LIBRARY_BASE "$ENV{HOME}/Libraries")
 
-# Set the correct version of C++
+# Set the C++ standard
 set(CMAKE_CXX_STANDARD 17)
 
-# Setup base directory
-set(LIBRARY_BASE $ENV{HOME}/Libraries)
+# Add OpenCV to the solution
+find_package( OpenCV REQUIRED )
+include_directories( ${OpenCV_INCLUDE_DIRS} )
 
-# Setup the includes for the libraries
-include_directories("../" "${LIBRARY_BASE}/NVLib")
+# Include OpenSSL
+find_package(OpenSSL REQUIRED)
 
 # Add the NVLib library to the folder
 add_library(NVLib STATIC IMPORTED)
@@ -29,14 +29,10 @@ set_target_properties(NVLib PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES "${LIBRARY_BASE}/NVLib"
 )
 
-# Add opencv to the solution
-find_package( OpenCV REQUIRED)
-include_directories( ${OpenCV_INCLUDE_DIRS} )
+# Create the executable
+add_executable(PointGen
+    Source.cpp
+)
 
-# Include OpenSSL
-find_package(OpenSSL REQUIRED)
-
-# Add the available subfolders
-add_subdirectory(PointGenLib)
-add_subdirectory(PointGenTests)
-add_subdirectory(PointGen)
+# Add link libraries                               
+target_link_libraries(PointGen NVLib ${OpenCV_LIBS} OpenSSL::SSL uuid)
