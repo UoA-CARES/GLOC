@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+
+<class>
+
+<namespace>NVL_App</namespace>
+<solution>F</solution>
+<name>Arguments</name>
+<description>The list of arguments that serve as input for the application</description>
+
+<includes>
+    <include name="iostream" namespace="std" local="false" />
+    <include name="opencv2/opencv.hpp" namespace="cv" local="false" />
+</includes>
+
+<variables>
+    <variable type="double" name="focal" code="10" />
+    <variable type="Size" name="imageSize" code="10" />
+    <variable type="Mat" name="distortion" code="10" />
+    <variable type="Vec2d" name="rvec" code="10" />
+    <variable type="Vec2d" name="tvec" code="10" />
+    <variable type="Vec2d" name="BlockSize" code="10" />
+    <variable type="Vec2d" name="GridSize" code="10" />
+</variables>
+
+<constructors>
+
+    <!-- Main Constructor -->
+    <constructor type="auto" inline="true" />
+
+</constructors>
+
+</class>
