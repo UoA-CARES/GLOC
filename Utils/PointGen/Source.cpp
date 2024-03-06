@@ -23,7 +23,7 @@ using namespace cv;
 // Function Prototypes
 //--------------------------------------------------
 void Run(NVLib::Parameters * parameters);
-unique_ptr<NVL_App::Arguments> GetArguments(NVLib::PathHelper& pathHelper);
+unique_ptr<NVL_App::Arguments> LoadArguments(NVLib::PathHelper& pathHelper);
 
 //--------------------------------------------------
 // Execution Logic
@@ -44,6 +44,9 @@ void Run(NVLib::Parameters * parameters)
     auto dataset = NVL_Utils::ArgReader::ReadString(parameters, "dataset");
     auto pathHelper = NVLib::PathHelper(database, dataset);
 
+    // Loading Arguments
+    auto arguments = LoadArguments(pathHelper);
+
     logger.StopApplication();
 }
 
@@ -56,26 +59,25 @@ void Run(NVLib::Parameters * parameters)
  * @param pathHelper The helper for getting the path information
  * @return The arguments that we are getting for the application
 */
-unique_ptr<NVL_App::Arguments> GetArguments(NVLib::PathHelper& pathHelper) 
+unique_ptr<NVL_App::Arguments> LoadArguments(NVLib::PathHelper& pathHelper) 
 {
     auto path = pathHelper.GetPath("Meta", "PointGen.xml");
 
     auto reader = FileStorage(path, FileStorage::FORMAT_XML | FileStorage::READ);
     if (!reader.isOpened()) throw runtime_error("Unable to open: " + path);
 
-
     double focal; reader["focal"] >> focal;
     Size imageSize; reader["image_size"] >> imageSize;
     Mat distortion; reader["distortion"] >> distortion;
-    Vec3d rotation; reader["rotation"] >> rotation;
-    Vec3d translation; reader["translation"] >> translation;
-    Vec2i blockSize; reader["block_size"] >> blockSize;
+    Vec3d rvec; reader["rotation"] >> rvec;
+    Vec3d tvec; reader["translation"] >> tvec;
+    Vec2d blockSize; reader["block_size"] >> blockSize;
     Vec2i gridSize; reader["grid_size"] >> gridSize;
-
+    string folder; reader["folder"] >> folder;
 
     reader.release();
 
-
+    return unique_ptr<NVL_App::Arguments>(new NVL_App::Arguments(focal, imageSize, distortion, rvec, tvec, blockSize, gridSize, folder));
 }
 
 //--------------------------------------------------
