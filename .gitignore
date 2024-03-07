@@ -7,3 +7,7 @@
 # Utilities
 Utils/BCamera/build/
 Utils/PointGen/build/
+
+# Data
+Data/**/*.png
+Data/**/*.jpg
