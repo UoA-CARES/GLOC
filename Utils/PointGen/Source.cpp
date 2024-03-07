@@ -24,6 +24,7 @@ using namespace cv;
 //--------------------------------------------------
 void Run(NVLib::Parameters * parameters);
 unique_ptr<NVL_App::Arguments> LoadArguments(NVLib::PathHelper& pathHelper);
+void FillScenePoints(NVL_App::Arguments * arguments, vector<Point3d>& points);
 
 //--------------------------------------------------
 // Execution Logic
@@ -39,13 +40,17 @@ void Run(NVLib::Parameters * parameters)
 
     logger.StartApplication();
 
-    // Create a helper for path tracking
+    logger.Log(1, "Create a path helper");
     auto database = NVL_Utils::ArgReader::ReadString(parameters, "database");
     auto dataset = NVL_Utils::ArgReader::ReadString(parameters, "dataset");
     auto pathHelper = NVLib::PathHelper(database, dataset);
 
-    // Loading Arguments
+    logger.Log(1, "Load the associated arguments from disk");
     auto arguments = LoadArguments(pathHelper);
+
+    logger.Log(1, "Generate the associated 3D points");
+    auto scenePoints = vector<Point3d>(); FillScenePoints(arguments.get(), scenePoints);
+    
 
     logger.StopApplication();
 }
@@ -78,6 +83,25 @@ unique_ptr<NVL_App::Arguments> LoadArguments(NVLib::PathHelper& pathHelper)
     reader.release();
 
     return unique_ptr<NVL_App::Arguments>(new NVL_App::Arguments(focal, imageSize, distortion, rvec, tvec, blockSize, gridSize, folder));
+}
+
+/**
+ * Add logic to generate scene points and put them into a points vector
+ * @param arguments The arguments provided for the application
+ * @param points The points that we are adding to the system
+ */
+void FillScenePoints(NVL_App::Arguments * arguments, vector<Point3d>& points) 
+{
+    for (auto row = 0; row < arguments->GetGridSize()[1]; row++) 
+    {
+        for (auto column = 0; column < arguments->GetGridSize()[0]; column++) 
+        {
+            auto X = column * arguments->GetBlockSize()[0];
+            auto Y = row * arguments->GetBlockSize()[1];
+            auto Z = 0;
+            points.push_back(Point3d(X, Y, Z));
+        }
+    }
 }
 
 //--------------------------------------------------
