@@ -25,6 +25,10 @@ using namespace cv;
 void Run(NVLib::Parameters * parameters);
 unique_ptr<NVL_App::Arguments> LoadArguments(NVLib::PathHelper& pathHelper);
 void FillScenePoints(NVL_App::Arguments * arguments, vector<Point3d>& points);
+void FillImagePoints(NVL_App::Arguments * arguments, const vector<Point3d>& scenePoints, vector<Point2d>& points);
+Mat BuildCameraMat(NVL_App::Arguments * arguments);
+Mat MakeImage(NVL_App::Arguments * arguments, const vector<Point2d>& points);
+void SavePoints(NVLib::PathHelper& pathHelper, const string& folder, const vector<Point3d>& scenePoints, const vector<Point2d>& imagePoints);
 
 //--------------------------------------------------
 // Execution Logic
@@ -51,6 +55,16 @@ void Run(NVLib::Parameters * parameters)
     logger.Log(1, "Generate the associated 3D points");
     auto scenePoints = vector<Point3d>(); FillScenePoints(arguments.get(), scenePoints);
     
+    logger.Log(1, "Generate the image 2D points");
+    auto imagePoints = vector<Point2d>(); FillImagePoints(arguments.get(), scenePoints, imagePoints);
+
+    logger.Log(1, "Save the resultant image");
+    Mat image = MakeImage(arguments.get(), imagePoints);
+    auto imagePath = pathHelper.GetPath(arguments->GetFolder(), "image.png");
+    imwrite(imagePath, image);
+
+    logger.Log(1, "Save the associated points");
+    SavePoints(pathHelper, arguments->GetFolder(), scenePoints, imagePoints);
 
     logger.StopApplication();
 }
@@ -102,6 +116,75 @@ void FillScenePoints(NVL_App::Arguments * arguments, vector<Point3d>& points)
             points.push_back(Point3d(X, Y, Z));
         }
     }
+}
+
+/**
+ * Add the logic to fill associated image points
+ * @param arguments The arguments that we are populating
+ * @param scenePoints The given scene points for the application
+ * @param points The resultant image points associated with the application
+ */
+void FillImagePoints(NVL_App::Arguments * arguments, const vector<Point3d> & scenePoints, vector<Point2d> & points) 
+{
+    Mat camera = BuildCameraMat(arguments);
+    Mat & distortion = arguments->GetDistortion();
+    auto& rvec = arguments->GetRvec();
+    auto& tvec = arguments->GetTvec();
+
+    projectPoints(scenePoints, rvec, tvec, camera, distortion, points);
+}
+
+/**
+ * Assemble the camera matrix
+ * @param arguments The arguments that we are dealing with
+*/
+Mat BuildCameraMat(NVL_App::Arguments * arguments) 
+{
+    auto fx = arguments->GetFocal(); 
+    auto fy = arguments->GetFocal();
+    auto cx = arguments->GetImageSize().width * 0.5;
+    auto cy = arguments->GetImageSize().height * 0.5;
+
+    return (Mat_<double>(3,3) << fx, 0, cx, 0, fy, cy, 0, 0, 1);
+}
+
+/**
+ * Generate an image that we are dealing with
+ * @param arguments The arguments that we are dealing with
+ * @param points The points that we are generating the images from
+ * @return The image that it was made
+*/
+Mat MakeImage(NVL_App::Arguments * arguments, const vector<Point2d>& points) 
+{
+    Mat image = Mat_<Vec3b>::zeros(arguments->GetImageSize());
+
+    for (auto& point : points) 
+    {
+        circle(image, point, 3, Scalar(0, 0, 255), FILLED);
+    }
+
+    return image;
+}
+
+/**
+ * Save the point files to disk
+ * @param pathHelper A helper for generating the path that we are saving to
+ * @param folder The folder that we are saving to
+ * @param scenePoints The scene points that are being saved
+ * @param imagePoints The image points that are being saved
+ */
+void SavePoints(NVLib::PathHelper& pathHelper, const string& folder, const vector<Point3d>& scenePoints, const vector<Point2d>& imagePoints) 
+{
+    auto path = pathHelper.GetPath(folder, "points.txt");
+    auto writer = ofstream(path); if (!writer.is_open()) throw runtime_error("Unable to create file: " + path);
+    if (scenePoints.size() != imagePoints.size()) throw runtime_error("There is a size mismatch between the scene points and image points");
+
+    for (auto i = 0; i < scenePoints.size(); i++) 
+    {
+        writer << scenePoints[i].x << "," << scenePoints[i].y << "," << scenePoints[i].z << "," << imagePoints[i].x << "," << imagePoints[i].y << endl;
+    }
+    
+    writer.close();
 }
 
 //--------------------------------------------------
