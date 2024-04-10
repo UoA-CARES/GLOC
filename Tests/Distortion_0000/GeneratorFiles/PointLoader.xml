@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+
+<class>
+
+<namespace>NVL_App</namespace>
+<solution>DFinderLib</solution>
+<name>PointLoader</name>
+<description>The functionality to load points from disk</description>
+
+<includes>
+    <include name="iostream" namespace="std" local="false" />
+    <include name="opencv2/opencv.hpp" namespace="cv" local="false" />
+    <include name="NVLib/Path/PathHelper.h" local="true" />
+    <include name="Grid.h" local="true" />
+</includes>
+
+<methods>
+
+    <!-- Retrieve the given set of grid points -->
+    <method section="Load" modifiers="static" access="public" return="Grid *" name="GetPoints" description="Add the functionality to load points from disk" inline="false">
+        <parameter type="NVLib::PathHelper *" name="pathHelper" description="A helper for setting up the path for finding the points file" />
+        <parameter type="const string&" name="folder" description="The folder in which we are searching for results" />
+    </method> 
+
+    <!-- Line Reader -->
+    <method section="Helper" modifiers="static" access="private" return="void" name="ReadLine" description="Read a line" inline="false">
+        <parameter type="istream&" name="reader" description="The reader that we are using" />
+        <parameter type="vector<double>&" name="values" description="The line that we have read" />
+    </method>   
+
+    <!-- Update Index Vector-->
+    <method section="Helper" modifiers="static" access="private" return="void" name="UpdateVector" description="Update the index vector" inline="false">
+        <parameter type="vector<double>&" name="indexVector" description="The index vector that we are updating" />
+        <parameter type="double" name="value" description="The new value that we are adding to the vector" />
+    </method>     
+
+    <!-- Get Factor -->
+    <method section="Helper" modifiers="static" access="private" return="double" name="GetFactor" description="Retrieve the conversion factor" inline="false">
+        <parameter type="const vector<double>&" name="indexVector" description="The index helper that we are determining the update factor from" />
+    </method>   
+
+</methods>
+
+<tests>
+    <test name="confirm_load" description="Determines that loading occurred in a successful way" exception="false" />
+</tests> 
+
+</class>

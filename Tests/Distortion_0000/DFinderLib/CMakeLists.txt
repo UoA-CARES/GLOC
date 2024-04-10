@@ -13,5 +13,7 @@ include_directories("../" "${LIBRARY_BASE}/NVLib")
 add_library (DFinderLib STATIC
 	ArgUtils.cpp
 	Grid.cpp
+	PointLoader.cpp
 )
+
 
