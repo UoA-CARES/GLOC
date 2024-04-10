@@ -22,7 +22,57 @@ using namespace NVL_App;
  */
 Grid * PointLoader::GetPoints(NVLib::PathHelper * pathHelper, const string& folder)
 {
-	throw runtime_error("Not implemented");
+	// Create a reader for reading in the data
+	auto path = pathHelper->GetPath(folder, "points.txt");
+	auto reader = ifstream(path); if (!reader.is_open()) throw runtime_error("Unable to open: " + path);
+
+	// Create a row and column indices
+	auto rowIndices = vector<double>(); auto columnIndices = vector<double>();
+
+	// Data
+	Mat pointData;
+
+	// Create the file
+	while(true) 
+	{
+		auto entry = vector<double>();
+		auto valid = ReadLine(reader, entry); if (!valid) break;
+
+		auto imagePoint = Point2d(entry[3], entry[4]); auto scenePoint = Point3d(entry[0], entry[1], entry[2]);
+
+		if (scenePoint.z != 0) throw runtime_error("It is expected the all Z values are 0");
+
+		UpdateVector(columnIndices, scenePoint.x); UpdateVector(rowIndices, scenePoint.y);
+
+		auto row = Mat_<double>(1, 5, entry.data()); pointData.push_back(row);
+	}
+
+	// Close the reader
+	reader.close();
+
+	// Create the grid
+	auto result = new Grid(Size(columnIndices.size(), rowIndices.size()));
+
+	// Get the conversion factors
+	auto xFactor = GetFactor(columnIndices); auto yFactor = GetFactor(rowIndices);
+
+	// Create a link to the point data
+	auto pLink = (double *) pointData.data;
+
+	// Populate the grid with data
+	for (auto row = 0; row < pointData.rows; row++) 
+	{
+		auto imagePoint = Point2d(pLink[row * 5 + 3], pLink[row * 5 + 4]);
+		auto scenePoint = Point3d(pLink[row * 5 + 0], pLink[row * 5 + 1], pLink[row * 5 + 2]);
+
+		auto gridX = (int) round(scenePoint.x / xFactor); auto gridY = (int) round(scenePoint.y / yFactor);
+
+		result->SetImagePoint(Point(gridX, gridY), imagePoint); 
+		result->SetScenePoint(Point(gridX, gridY), scenePoint);
+	}
+
+	// return the result
+	return result;
 }
 
 //--------------------------------------------------
@@ -34,9 +84,22 @@ Grid * PointLoader::GetPoints(NVLib::PathHelper * pathHelper, const string& fold
  * @param reader The reader that we are using
  * @param values The line that we have read
  */
-void PointLoader::ReadLine(istream& reader, vector<double>& values)
+bool PointLoader::ReadLine(istream& reader, vector<double>& values)
 {
-	throw runtime_error("Not implemented");
+	auto line = string(); getline(reader, line); if (line == string()) return false;
+
+	auto parts = vector<string>(); NVLib::StringUtils::Split(line, ',', parts);
+	if (parts.size() != 5) throw runtime_error("Invalid line in input: " + line);
+
+	values.clear();
+
+	for (auto i = 0; i < parts.size(); i++) 
+	{
+		auto value = NVLib::StringUtils::String2Double(parts[i]);
+		values.push_back(value);
+	}
+
+	return true;
 }
 
 /**
@@ -46,7 +109,18 @@ void PointLoader::ReadLine(istream& reader, vector<double>& values)
  */
 void PointLoader::UpdateVector(vector<double>& indexVector, double value)
 {
-	throw runtime_error("Not implemented");
+	for (auto i = indexVector.begin(); i != indexVector.end(); i++) 
+	{
+		auto current = *i;
+		if (current == value) return;
+
+		if (current > value) 
+		{
+			indexVector.insert(i, value); return;
+		}
+	}
+
+	indexVector.push_back(value);
 }
 
 /**
@@ -56,5 +130,9 @@ void PointLoader::UpdateVector(vector<double>& indexVector, double value)
  */
 double PointLoader::GetFactor(const vector<double>& indexVector)
 {
-	throw runtime_error("Not implemented");
+	if (indexVector[0] != 0) throw runtime_error("Get factor failed, it is expected that the first index is 0");
+
+	// TODO: We could add consistency checking here!
+
+	return indexVector[1];
 }

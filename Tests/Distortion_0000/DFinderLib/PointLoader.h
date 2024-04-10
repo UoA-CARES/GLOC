@@ -24,7 +24,7 @@ namespace NVL_App
 	public:
 		static Grid * GetPoints(NVLib::PathHelper * pathHelper, const string& folder);
 	private:
-		static void ReadLine(istream& reader, vector<double>& values);
+		static bool ReadLine(istream& reader, vector<double>& values);
 		static void UpdateVector(vector<double>& indexVector, double value);
 		static double GetFactor(const vector<double>& indexVector);
 	};
