@@ -23,6 +23,9 @@ namespace NVL_App
 	public:
 		static Mat GetHomography(Grid * grid);
 		static double GetHScore(Mat& H, Grid * grid);
-		static Point2d Transform(Mat& H, const Point3d& point);
+		static Point2d Transform(Mat& H, const Point2d& point);
+	private:
+		static Point2f Convert(const Point2d& point);
+		static Point2f Convert(const Point3d& point);
 	};
 }

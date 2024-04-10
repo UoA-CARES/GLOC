@@ -9,7 +9,6 @@
 #include "Homography.h"
 using namespace NVL_App;
 
-
 //--------------------------------------------------
 // Generate
 //--------------------------------------------------
@@ -21,7 +20,23 @@ using namespace NVL_App;
  */
 Mat Homography::GetHomography(Grid * grid)
 {
-	throw runtime_error("Not implemented");
+	auto scenePoints = vector<Point2f>(); auto imagePoints = vector<Point2f>();
+
+	auto xmax = grid->GetColumns() - 1; auto ymax = grid->GetRows() - 1; 
+
+	scenePoints.push_back(Convert(grid->GetScenePoint(Point(0,0))));
+	imagePoints.push_back(Convert(grid->GetImagePoint(Point(0,0))));
+
+	scenePoints.push_back(Convert(grid->GetScenePoint(Point(xmax,0))));
+	imagePoints.push_back(Convert(grid->GetImagePoint(Point(xmax,0))));
+
+	scenePoints.push_back(Convert(grid->GetScenePoint(Point(xmax,ymax))));
+	imagePoints.push_back(Convert(grid->GetImagePoint(Point(xmax,ymax))));
+
+	scenePoints.push_back(Convert(grid->GetScenePoint(Point(0,ymax))));
+	imagePoints.push_back(Convert(grid->GetImagePoint(Point(0,ymax))));
+
+	return cv::findHomography(scenePoints, imagePoints);
 }
 
 //--------------------------------------------------
@@ -36,7 +51,25 @@ Mat Homography::GetHomography(Grid * grid)
  */
 double Homography::GetHScore(Mat& H, Grid * grid)
 {
-	throw runtime_error("Not implemented");
+	auto total = 0.0;
+
+	for (auto row = 0; row < grid->GetRows(); row++) 
+	{
+		for (auto column = 0; column < grid->GetColumns(); column++) 
+		{
+			auto scenePoint = grid->GetScenePoint(Point(column, row));
+			auto expected = Transform(H, Convert(scenePoint));
+			auto actual = grid->GetImagePoint(Point(column, row));
+
+			auto xDiff = expected.x - actual.x;
+			auto yDiff = expected.y - actual.y;
+			auto score = sqrt(xDiff * xDiff + yDiff * yDiff);
+
+			total += score;
+		}
+	}
+
+	return total;
 }
 
 //--------------------------------------------------
@@ -49,7 +82,37 @@ double Homography::GetHScore(Mat& H, Grid * grid)
  * @param point The point that we are converting
  * @return Point2d Returns a Point2d
  */
-Point2d Homography::Transform(Mat& H, const Point3d& point)
+Point2d Homography::Transform(Mat& H, const Point2d& point)
 {
-	throw runtime_error("Not implemented");
+	auto hLink = (double *) H.data;
+
+	auto X = hLink[0] * point.x + hLink[1] * point.y + hLink[2];
+	auto Y = hLink[3] * point.x + hLink[4] * point.y + hLink[5];
+	auto Z = hLink[6] * point.x + hLink[7] * point.y + hLink[8];
+
+	return Point2d( X / Z, Y / Z);
+}
+
+//--------------------------------------------------
+// Generation
+//--------------------------------------------------
+
+/**
+ * Convert a "double" image point into a float point
+ * @param point The point that we dealing with
+ * @return The resultant point
+*/
+Point2f Homography::Convert(const Point2d& point) 
+{
+	return Point2f((float) point.x, (float) point.y);
+}
+
+/**
+ * Convert a "double" 3D point that we are dealing with
+ * @param point the scene point
+ * @return The resultant point
+*/
+Point2f Homography::Convert(const Point3d& point) 
+{
+	return Point2f((float) point.x, (float) point.y);
 }

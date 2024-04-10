@@ -78,11 +78,11 @@ TEST(Homography_Test, h_score)
 	Mat H = Homography::GetHomography(&grid);
 
 	// Determine a theoretical error
-	auto p_1 = Homography::Transform(H, Point3d(1,0,0)); auto s_1 = GetPointMagnitude(p_1);
-	auto p_2 = Homography::Transform(H, Point3d(0,1,0)); auto s_2 = GetPointMagnitude(p_2);
-	auto p_3 = Homography::Transform(H, Point3d(1,1,0)); auto s_3 = GetPointMagnitude(p_3);
-	auto p_4 = Homography::Transform(H, Point3d(2,1,0)); auto s_4 = GetPointMagnitude(p_4);
-	auto p_5 = Homography::Transform(H, Point3d(1,2,0)); auto s_5 = GetPointMagnitude(p_5);
+	auto p_1 = Homography::Transform(H, Point2d(1,0)); auto s_1 = GetPointMagnitude(p_1);
+	auto p_2 = Homography::Transform(H, Point2d(0,1)); auto s_2 = GetPointMagnitude(p_2);
+	auto p_3 = Homography::Transform(H, Point2d(1,1)); auto s_3 = GetPointMagnitude(p_3);
+	auto p_4 = Homography::Transform(H, Point2d(2,1)); auto s_4 = GetPointMagnitude(p_4);
+	auto p_5 = Homography::Transform(H, Point2d(1,2)); auto s_5 = GetPointMagnitude(p_5);
 
 	// Confirm
 	auto expectedError = s_1 + s_2 + s_3 + s_4 + s_5;
@@ -101,5 +101,5 @@ TEST(Homography_Test, h_score)
 */
 double GetPointMagnitude(const Point2d& point) 
 {
-	return sqrt(point.x * point.x + point.y + point.y);
+	return sqrt(point.x * point.x + point.y * point.y);
 }
