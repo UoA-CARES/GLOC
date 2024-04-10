@@ -17,17 +17,17 @@ using namespace NVL_App;
  * @brief Initializer Constructor
  * @param data Initialize variable <data>
  */
-Grid::Grid(Mat& data)
+Grid::Grid(Mat& data) : _data(data)
 {
-	_data = data;
+	// Extra initialization can go here
 }
 
 /**
- * @brief Main Terminator
- */
-Grid::~Grid()
+ * @brief The dize of the data constructor
+*/
+Grid::Grid(const Size& gridSize) 
 {
-	// TODO: Add teardown logic here
+	_data = Mat_<Vec<double, 5>>::zeros(gridSize);
 }
 
 //--------------------------------------------------
@@ -40,7 +40,7 @@ Grid::~Grid()
  */
 int Grid::GetRows()
 {
-	throw runtime_error("Not implemented");
+	return _data.rows;
 }
 
 /**
@@ -49,7 +49,7 @@ int Grid::GetRows()
  */
 int Grid::GetColumns()
 {
-	throw runtime_error("Not implemented");
+	return _data.cols;
 }
 
 /**
@@ -59,7 +59,15 @@ int Grid::GetColumns()
  */
 Point2d Grid::GetImagePoint(const Point& location)
 {
-	throw runtime_error("Not implemented");
+	if (location.x < 0 || location.x >= _data.cols || location.y < 0 || location.y >= _data.rows) throw runtime_error("location is out of range");
+
+	auto dlink = (double *) _data.data;
+	auto index = location.x + location.y * _data.cols;
+
+	auto u = dlink[index * 5 + 0];
+	auto v = dlink[index * 5 + 1];
+
+	return Point2d(u, v);
 }
 
 /**
@@ -69,5 +77,51 @@ Point2d Grid::GetImagePoint(const Point& location)
  */
 Point3d Grid::GetScenePoint(const Point& location)
 {
-	throw runtime_error("Not implemented");
+	if (location.x < 0 || location.x >= _data.cols || location.y < 0 || location.y >= _data.rows) throw runtime_error("location is out of range");
+
+	auto dlink = (double *) _data.data;
+	auto index = location.x + location.y * _data.cols;
+
+	auto X = dlink[index * 5 + 2];
+	auto Y = dlink[index * 5 + 3];
+	auto Z = dlink[index * 5 + 4];
+
+	return Point3d(X, Y, Z);
+}
+
+//--------------------------------------------------
+// Getter
+//--------------------------------------------------
+
+/**
+ * Set the associated image point location
+ * @param location The location of the given point
+ * @param point The point that we are setting
+*/
+void Grid::SetImagePoint(const Point& location, const Point2d& point) 
+{
+	if (location.x < 0 || location.x >= _data.cols || location.y < 0 || location.y >= _data.rows) throw runtime_error("location is out of range");
+
+	auto dlink = (double *) _data.data;
+	auto index = location.x + location.y * _data.cols;
+
+	dlink[index * 5 + 0] = point.x;
+	dlink[index * 5 + 1] = point.y;
+}
+
+/**
+ * Set the associated scene point location
+ * @param location The location that we are setting
+ * @param point The point that is being set
+*/
+void Grid::SetScenePoint(const Point& location, const Point3d& point) 
+{
+	if (location.x < 0 || location.x >= _data.cols || location.y < 0 || location.y >= _data.rows) throw runtime_error("location is out of range");
+
+	auto dlink = (double *) _data.data;
+	auto index = location.x + location.y * _data.cols;
+
+	dlink[index * 5 + 2] = point.x;
+	dlink[index * 5 + 3] = point.y;
+	dlink[index * 5 + 4] = point.z;
 }

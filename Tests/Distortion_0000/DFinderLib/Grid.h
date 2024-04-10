@@ -22,12 +22,16 @@ namespace NVL_App
 		Mat _data;
 	public:
 		Grid(Mat& data);
-		~Grid();
+		Grid(const Size& gridSize);
 
 		int GetRows();
 		int GetColumns();
+		
 		Point2d GetImagePoint(const Point& location);
 		Point3d GetScenePoint(const Point& location);
+
+		void SetImagePoint(const Point& location, const Point2d& point);
+		void SetScenePoint(const Point& location, const Point3d& point);
 
 		inline Mat& GetData() { return _data; }
 	};
