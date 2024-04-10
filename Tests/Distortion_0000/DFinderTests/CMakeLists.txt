@@ -13,9 +13,11 @@ find_package(GTest REQUIRED)
 include_directories("../")
 
 # Create the executable
-add_executable(DFinderTests
-    Tests/Example_Tests.cpp
+add_executable (DFinderTests
+	Tests/Example_Tests.cpp
+	Tests/Grid_Tests.cpp
 )
+
 
 # Add link libraries
 target_link_libraries(DFinderTests DFinderLib NVLib ${OpenCV_LIBS} OpenSSL::SSL uuid GTest::Main)
