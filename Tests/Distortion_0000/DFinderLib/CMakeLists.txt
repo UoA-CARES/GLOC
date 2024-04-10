@@ -14,6 +14,8 @@ add_library (DFinderLib STATIC
 	ArgUtils.cpp
 	Grid.cpp
 	PointLoader.cpp
+	Homography.cpp
 )
+
 
 
