@@ -19,7 +19,9 @@ using namespace NVL_App;
  */
 Distortion::Distortion(const Size& imageSize)
 {
-	throw runtime_error("Not implemented");
+	auto f = max(imageSize.width, imageSize.height) * 2;
+	auto cx = imageSize.width * 0.5; auto cy = imageSize.height * 0.5;
+	_camera = (Mat_<double>(3,3) << f, 0, cx, 0, f, cy, 0, 0, 1);
 }
 
 //--------------------------------------------------
@@ -34,5 +36,24 @@ Distortion::Distortion(const Size& imageSize)
  */
 Grid * Distortion::Undistort(Grid * grid, Mat& dparams)
 {
-	throw runtime_error("Not implemented");
+	auto result = new Grid(grid->GetSize());
+
+	for (auto row = 0; row < grid->GetRows(); row++) 
+	{
+		for (auto column = 0; column < grid->GetColumns(); column++) 
+		{
+			auto index = Point(column, row);
+			auto scenePoint = grid->GetScenePoint(index);
+			auto imagePoint = grid->GetImagePoint(index);
+
+			auto input = vector<Point2d> { imagePoint }; auto output = vector<Point2d>();
+
+			undistortPoints(input, output, _camera, dparams, noArray(), _camera);
+
+			result->SetScenePoint(index, scenePoint);
+			result->SetImagePoint(index, output[0]);
+		}
+	}
+
+	return result;
 }

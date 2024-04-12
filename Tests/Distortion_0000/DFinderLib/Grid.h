@@ -26,6 +26,7 @@ namespace NVL_App
 
 		int GetRows();
 		int GetColumns();
+		Size GetSize();
 		
 		Point2d GetImagePoint(const Point& location);
 		Point3d GetScenePoint(const Point& location);

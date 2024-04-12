@@ -53,6 +53,14 @@ int Grid::GetColumns()
 }
 
 /**
+ * Retrieve the size of the grid
+*/
+Size Grid::GetSize() 
+{
+	return _data.size();
+}
+
+/**
  * @brief Retrieve the image point
  * @param location The location of the image point that we want
  * @return Point2d Returns a Point2d
