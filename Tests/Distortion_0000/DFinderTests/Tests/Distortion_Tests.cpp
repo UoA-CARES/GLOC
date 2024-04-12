@@ -7,9 +7,7 @@
 //--------------------------------------------------
 
 #include <gtest/gtest.h>
-
 #include <NVLib/Math2D.h>
-
 #include <DFinderLib/Distortion.h>
 using namespace NVL_App;
 

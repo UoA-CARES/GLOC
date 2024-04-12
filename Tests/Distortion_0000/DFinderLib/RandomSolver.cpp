@@ -41,9 +41,10 @@ RandomSolver::~RandomSolver()
 /**
  * @brief Attempt to iterate and find solution
  * @param maxIterators The maximum number of iterations to try
+ * @param verbose Indicates whether we want to see some console outputs
  * @return double Returns a double
  */
-double RandomSolver::Solve(int maxIterators)
+double RandomSolver::Solve(int maxIterators, bool verbose)
 {
 	throw runtime_error("Not implemented");
 }

@@ -32,7 +32,7 @@ namespace NVL_App
 		RandomSolver(const Size& imageSize, Grid * grid, Mat& dparams);
 		~RandomSolver();
 
-		double Solve(int maxIterators);
+		double Solve(int maxIterators, bool verbose = true);
 
 		inline Distortion * GetDistortion() { return _distortion; }
 		inline Grid * GetGrid() { return _grid; }
