@@ -18,7 +18,9 @@ add_executable (DFinderTests
 	Tests/Grid_Tests.cpp
 	Tests/PointLoader_Tests.cpp
 	Tests/Homography_Tests.cpp
+	Tests/Distortion_Tests.cpp
 )
+
 
 
 

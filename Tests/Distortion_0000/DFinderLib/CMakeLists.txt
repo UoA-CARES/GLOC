@@ -15,7 +15,9 @@ add_library (DFinderLib STATIC
 	Grid.cpp
 	PointLoader.cpp
 	Homography.cpp
+	Distortion.cpp
 )
+
 
 
 
