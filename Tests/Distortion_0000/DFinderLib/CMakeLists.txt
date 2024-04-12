@@ -16,8 +16,5 @@ add_library (DFinderLib STATIC
 	PointLoader.cpp
 	Homography.cpp
 	Distortion.cpp
+	RandomSolver.cpp
 )
-
-
-
-

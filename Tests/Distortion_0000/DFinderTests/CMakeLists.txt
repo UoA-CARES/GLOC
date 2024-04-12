@@ -19,11 +19,8 @@ add_executable (DFinderTests
 	Tests/PointLoader_Tests.cpp
 	Tests/Homography_Tests.cpp
 	Tests/Distortion_Tests.cpp
+	Tests/RandomSolver_Tests.cpp
 )
-
-
-
-
 
 # Add link libraries
 target_link_libraries(DFinderTests DFinderLib NVLib ${OpenCV_LIBS} OpenSSL::SSL uuid GTest::Main)
