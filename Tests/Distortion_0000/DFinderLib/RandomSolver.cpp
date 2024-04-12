@@ -21,6 +21,8 @@ using namespace NVL_App;
  */
 RandomSolver::RandomSolver(const Size& imageSize, Grid * grid, Mat& dparams) : _grid(grid), _dparams(dparams)
 {
+	NVLib::RandomUtils::TimeSeedRandomNumbers();
+
 	_distortion = new Distortion(imageSize);
 	Mat H = Homography::GetHomography(_grid);
 	_bestScore = Homography::GetHScore(H, _grid);
@@ -46,5 +48,33 @@ RandomSolver::~RandomSolver()
  */
 double RandomSolver::Solve(int maxIterators, bool verbose)
 {
-	throw runtime_error("Not implemented");
+	Mat dparams = _dparams.clone(); 
+	
+	auto dlink_1 = (double *) dparams.data;
+	auto dlink_2 = (double *) _dparams.data;
+
+	for (auto i = 0; i < maxIterators; i++) 
+	{
+		auto degree = NVLib::RandomUtils::GetInteger(0,5);
+
+
+	}
+
+	return _bestScore;
+}
+
+//--------------------------------------------------
+// Solver
+//--------------------------------------------------
+
+/**
+ * Get a random generator
+ * @param order The order that we are dealing
+ * @return The delta 
+ */
+double RandomSolver::GetNumber(int order) 
+{
+	auto number = NVLib::RandomUtils::GetInteger(-1000, 1000) / 1000.0;
+	auto factor = 1.0; for (auto i = 0; i < order; i++) factor /= 10.0;
+	return number * factor;
 }
