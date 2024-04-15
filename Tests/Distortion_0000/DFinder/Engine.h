@@ -16,6 +16,7 @@ using namespace std;
 
 #include <DFinderLib/ArgUtils.h>
 #include <DFinderLib/PointLoader.h>
+#include <DFinderLib/ImageCallback.h>
 
 namespace NVL_App
 {

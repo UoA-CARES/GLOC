@@ -36,6 +36,10 @@ Engine::Engine(NVLib::Logger* logger, NVLib::Parameters* parameters)
     Mat testImage = imread(testImagePath); if (testImage.empty()) throw runtime_error("Unable to find test image: " + testImagePath);
     auto imageSize = testImage.size();
 
+    _logger->Log(1, "Setup a callback object");
+    auto callback = ImageCallback(grid->GetImagePointMatrix());
+    callback.Callback(0, -1, Mat(), Mat());
+    waitKey();
 
 
     delete grid;

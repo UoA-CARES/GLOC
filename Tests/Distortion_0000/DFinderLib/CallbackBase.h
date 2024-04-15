@@ -20,6 +20,6 @@ namespace NVL_App
 	{
 	public:
 		CallbackBase() {}
-		virtual void Callback(int iteration, double aveError, Mat& parameters, Mat& data) = 0;
+		virtual void Callback(int iteration, double aveError, const Mat& parameters, const Mat& data) = 0;
 	};
 }

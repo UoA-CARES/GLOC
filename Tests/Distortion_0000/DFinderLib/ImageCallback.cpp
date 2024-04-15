@@ -17,7 +17,7 @@ using namespace NVL_App;
  * @brief Custom Constructor
  * @param basePoints The base point
  */
-ImageCallback::ImageCallback(Mat& basePoints) : _basePoints(basePoints)
+ImageCallback::ImageCallback(const Mat& basePoints) : CallbackBase(), _basePoints(basePoints)
 {
 	// Main Constructor
 }
@@ -33,14 +33,14 @@ ImageCallback::ImageCallback(Mat& basePoints) : _basePoints(basePoints)
  * @param parameters The parameters associated with the test case
  * @param data Additional data associated with the system
  */
-void ImageCallback::Callback(int iteration, double aveError, Mat& parameters, Mat& data)
+void ImageCallback::Callback(int iteration, double aveError, const Mat& parameters, const Mat& data)
 {
 	Mat display = Mat_<Vec3d>::zeros(1000,1000);
 	auto pixelCount = _basePoints.rows * _basePoints.cols;
 
 	auto points = vector<Point>();
 
-	auto oLink = _basePoints.data;
+	auto oLink = (double *) _basePoints.data;
 	for (auto i = 0; i < pixelCount; i++) 
 	{
 		auto u = (int)round(oLink[2 * i + 0]);

@@ -19,7 +19,7 @@ class TestCallback : public CallbackBase
 {
 public:
 	TestCallback() : CallbackBase() {}
-	virtual void Callback(int iteration, double aveError, Mat& parameters, Mat& data) override 
+	virtual void Callback(int iteration, double aveError, const Mat& parameters, const Mat& data) override 
 	{
 		cout << iteration << ". " << parameters.t() << ": " << aveError << endl;
 	}

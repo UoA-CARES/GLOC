@@ -23,7 +23,7 @@ namespace NVL_App
 	private:
 		Mat _basePoints;
 	public:
-		ImageCallback(Mat& basePoints);
-		virtual void Callback(int iteration, double aveError, Mat& parameters, Mat& data) override;
+		ImageCallback(const Mat& basePoints);
+		virtual void Callback(int iteration, double aveError, const Mat& parameters, const Mat& data) override;
 	};
 }
