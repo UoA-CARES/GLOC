@@ -11,6 +11,7 @@ Utils/PointGen/build/
 # Data
 Data/**/*.png
 Data/**/*.jpg
+Data/**/*.txt
 
 # Tests
 Tests/Distortion_0000/build/

@@ -26,9 +26,11 @@ void Run(NVLib::Parameters * parameters);
 unique_ptr<NVL_App::Arguments> LoadArguments(NVLib::PathHelper& pathHelper);
 void FillScenePoints(NVL_App::Arguments * arguments, vector<Point3d>& points);
 void FillImagePoints(NVL_App::Arguments * arguments, const vector<Point3d>& scenePoints, vector<Point2d>& points);
+void FillUImagePoints(NVL_App::Arguments * arguments, const vector<Point3d>& scenePoints, vector<Point2d>& points);
 Mat BuildCameraMat(NVL_App::Arguments * arguments);
 Mat MakeImage(NVL_App::Arguments * arguments, const vector<Point2d>& points);
 void SavePoints(NVLib::PathHelper& pathHelper, const string& folder, const vector<Point3d>& scenePoints, const vector<Point2d>& imagePoints);
+void SaveTruthPoints(NVLib::PathHelper& pathHelper, const string& folder, const vector<Point2d>& imagePoints);
 
 //--------------------------------------------------
 // Execution Logic
@@ -58,6 +60,9 @@ void Run(NVLib::Parameters * parameters)
     logger.Log(1, "Generate the image 2D points");
     auto imagePoints = vector<Point2d>(); FillImagePoints(arguments.get(), scenePoints, imagePoints);
 
+    logger.Log(1, "Generating ground truth image points");
+    auto truthPoints = vector<Point2d>(); FillUImagePoints(arguments.get(), scenePoints, truthPoints);
+
     logger.Log(1, "Save the resultant image");
     Mat image = MakeImage(arguments.get(), imagePoints);
     auto imagePath = pathHelper.GetPath(arguments->GetFolder(), "image.png");
@@ -65,6 +70,9 @@ void Run(NVLib::Parameters * parameters)
 
     logger.Log(1, "Save the associated points");
     SavePoints(pathHelper, arguments->GetFolder(), scenePoints, imagePoints);
+
+    logger.Log(1, "Save the truth points");
+    SaveTruthPoints(pathHelper, arguments->GetFolder(), truthPoints);
 
     logger.StopApplication();
 }
@@ -135,6 +143,22 @@ void FillImagePoints(NVL_App::Arguments * arguments, const vector<Point3d> & sce
 }
 
 /**
+ * Generate a "ground-truth" set of image point for evaluation purposes
+ * @param arguments The arguments that we are using for the point generating
+ * @param scenePoint The list of scene points that we are dealing with
+ * @param points The points that we are generating as a result
+*/
+void FillUImagePoints(NVL_App::Arguments * arguments, const vector<Point3d>& scenePoints, vector<Point2d>& points) 
+{
+  Mat camera = BuildCameraMat(arguments);
+    Mat distortion = Mat_<double>::zeros(4,1);
+    auto& rvec = arguments->GetRvec();
+    auto& tvec = arguments->GetTvec();
+
+    projectPoints(scenePoints, rvec, tvec, camera, distortion, points);
+}
+
+/**
  * Assemble the camera matrix
  * @param arguments The arguments that we are dealing with
 */
@@ -182,6 +206,25 @@ void SavePoints(NVLib::PathHelper& pathHelper, const string& folder, const vecto
     for (auto i = 0; i < scenePoints.size(); i++) 
     {
         writer << scenePoints[i].x << "," << scenePoints[i].y << "," << scenePoints[i].z << "," << imagePoints[i].x << "," << imagePoints[i].y << endl;
+    }
+    
+    writer.close();
+}
+
+/**
+ * Save the truth points to disk
+ * @param pathHelper the path helper that we are using
+ * @param folder The folder that w are writing to
+ * @param imagePoints The image points that we are writing
+*/
+void SaveTruthPoints(NVLib::PathHelper& pathHelper, const string& folder, const vector<Point2d>& imagePoints) 
+{
+    auto path = pathHelper.GetPath(folder, "truth.txt");
+    auto writer = ofstream(path); if (!writer.is_open()) throw runtime_error("Unable to create file: " + path);
+
+    for (auto i = 0; i < imagePoints.size(); i++) 
+    {
+        writer << imagePoints[i].x << "," << imagePoints[i].y << endl;
     }
     
     writer.close();
