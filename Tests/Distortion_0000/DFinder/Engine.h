@@ -27,10 +27,13 @@ namespace NVL_App
 		NVLib::Parameters * _parameters;
 		NVLib::Logger* _logger;
 		NVLib::PathHelper * _pathHelper;
+		string _pointFolder;
 	public:
 		Engine(NVLib::Logger* logger, NVLib::Parameters * parameters);
 		~Engine();
 
 		void Run();
+	private:
+		void SaveUPoints(const string& folder, Mat& points);
 	};
 }

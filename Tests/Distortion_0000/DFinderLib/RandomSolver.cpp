@@ -33,7 +33,7 @@ RandomSolver::RandomSolver(const Size& imageSize, Grid * grid, Mat& dparams) : _
  */
 RandomSolver::~RandomSolver()
 {
-	delete _grid; delete _distortion;
+	delete _distortion;
 }
 
 //--------------------------------------------------
@@ -43,15 +43,18 @@ RandomSolver::~RandomSolver()
 /**
  * @brief Attempt to iterate and find solution
  * @param maxIterators The maximum number of iterations to try
+ * @param sensitivity Indicate when the updates can timeout
  * @param callback If one is supplied, it is raised everytime a significant event occurs
  * @return double Returns a double
  */
-double RandomSolver::Solve(int maxIterators, CallbackBase * callback)
+double RandomSolver::Solve(int maxIterators, int sensitivity, CallbackBase * callback)
 {
 	Mat dparams = _dparams.clone(); 
 	
 	auto dlink_1 = (double *) dparams.data;
 	auto dlink_2 = (double *) _dparams.data;
+
+	int noUpdate = 0;
 
 	for (auto i = 0; i < maxIterators; i++) 
 	{
@@ -78,12 +81,34 @@ double RandomSolver::Solve(int maxIterators, CallbackBase * callback)
 			}
 
 			for (auto j = 0; j < 4; j++) dlink_2[j] = dlink_1[j];
+
+			noUpdate = 0;
 		}
+		else noUpdate++;
 
 		delete grid;
+
+		if (noUpdate >= sensitivity) break;
 	}
 
 	return _bestScore;
+}
+
+//--------------------------------------------------
+// Solver
+//--------------------------------------------------
+
+/**
+ * Get the image points that we are dealing with
+ * @return A matrix containing the image points
+*/
+Mat RandomSolver::GetImagePoints() 
+{
+	auto grid = _distortion->Undistort(_grid, _dparams);
+	Mat result = grid->GetImagePointMatrix();
+	delete grid;
+
+	return result;
 }
 
 //--------------------------------------------------

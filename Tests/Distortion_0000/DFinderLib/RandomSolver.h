@@ -34,7 +34,9 @@ namespace NVL_App
 		RandomSolver(const Size& imageSize, Grid * grid, Mat& dparams);
 		~RandomSolver();
 
-		double Solve(int maxIterators, CallbackBase * callback = nullptr);
+		double Solve(int maxIterators, int sensitivity = 100, CallbackBase * callback = nullptr);
+
+		Mat GetImagePoints();
 
 		inline Distortion * GetDistortion() { return _distortion; }
 		inline Grid * GetGrid() { return _grid; }

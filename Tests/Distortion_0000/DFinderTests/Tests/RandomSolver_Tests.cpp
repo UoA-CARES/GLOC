@@ -61,6 +61,6 @@ TEST(RandomSolver_Test, solution_test_00)
 	// Confirm
 	auto solver = RandomSolver(imageSize, grid_2, noDistortion);
 	auto callback = TestCallback();
-	auto score = solver.Solve(300000, &callback);
+	auto score = solver.Solve(300000, 100, &callback);
 	ASSERT_LT(score / (grid_1.GetColumns() * grid_1.GetRows()), 1);
 }
