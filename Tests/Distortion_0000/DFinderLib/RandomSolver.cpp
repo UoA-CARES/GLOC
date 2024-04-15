@@ -66,14 +66,21 @@ double RandomSolver::Solve(int maxIterators, CallbackBase * callback)
 		auto grid = _distortion->Undistort(_grid, dparams);
 		Mat H = Homography::GetHomography(grid);
 		auto score = Homography::GetHScore(H, grid);
-		delete grid;
-
+	
 		if (score < _bestScore) 
 		{
 			_bestScore = score;
-			cout << "New Best Score: " << score << endl;
+			
+			if (callback != nullptr) 
+			{
+				Mat pointMat = grid->GetImagePointMatrix();
+				callback->Callback(i, score, dparams, pointMat);
+			}
+
 			for (auto j = 0; j < 4; j++) dlink_2[j] = dlink_1[j];
 		}
+
+		delete grid;
 	}
 
 	return _bestScore;
