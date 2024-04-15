@@ -17,4 +17,5 @@ add_library (DFinderLib STATIC
 	Homography.cpp
 	Distortion.cpp
 	RandomSolver.cpp
+	ImageCallback.cpp
 )

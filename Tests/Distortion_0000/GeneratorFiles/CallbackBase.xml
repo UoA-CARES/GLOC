@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+
+<class>
+
+<namespace>NVL_App</namespace>
+<solution>DFinderLib</solution>
+<name>CallbackBase</name>
+<description></description>
+
+<includes>
+    <include name="iostream" namespace="std" local="false" />
+    <include name="opencv2/opencv.hpp" namespace="cv" local="false" />
+</includes>
+
+<constructors>
+
+    <!-- Main Constructor -->
+    <constructor type="empty" inline="true" />
+
+</constructors>
+
+<methods>
+
+    <!-- Defines the callback method -->
+    <method section="Callback" modifiers="virtual" access="public" return="void" name="Callback" description="The callback method that we are using" inline="true">
+        <parameter type="double" name="aveError" description="The average error associated with the system" />
+        <parameter type="Mat&" name="parameters" description="The parameters associated with the test case" />
+        <parameter type="Mat&" name="data" description="Additional data associated with the system" />
+    </method>    
+    
+</methods>
+
+</class>
