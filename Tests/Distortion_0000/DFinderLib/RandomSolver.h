@@ -40,5 +40,8 @@ namespace NVL_App
 		inline Grid * GetGrid() { return _grid; }
 		inline double GetBestScore() { return _bestScore; }
 		inline Mat& GetDParams() { return _dparams; }
+	
+	private:
+		double GetNumber(int order);
 	};
 }

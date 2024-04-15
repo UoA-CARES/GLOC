@@ -55,9 +55,25 @@ double RandomSolver::Solve(int maxIterators, bool verbose)
 
 	for (auto i = 0; i < maxIterators; i++) 
 	{
-		auto degree = NVLib::RandomUtils::GetInteger(0,5);
+		for (auto j = 0; j < 4; j++) dlink_1[j] = dlink_2[j];
 
+		auto order = NVLib::RandomUtils::GetInteger(0, 2);
+		auto index = NVLib::RandomUtils::GetInteger(0, 4);
+		auto delta = GetNumber(order);
 
+		dlink_1[index] += delta;
+
+		auto grid = _distortion->Undistort(_grid, dparams);
+		Mat H = Homography::GetHomography(grid);
+		auto score = Homography::GetHScore(H, grid);
+		delete grid;
+
+		if (score < _bestScore) 
+		{
+			_bestScore = score;
+			cout << "New Best Score: " << score << endl;
+			for (auto j = 0; j < 4; j++) dlink_2[j] = dlink_1[j];
+		}
 	}
 
 	return _bestScore;

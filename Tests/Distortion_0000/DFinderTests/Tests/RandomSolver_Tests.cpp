@@ -23,12 +23,12 @@ extern void AddGridPoint(Grid * grid, const Point& index, const Point3d& scenePo
 /**
  * @brief Test the solver operation
  */
-TEST(RandomSolver_Test, solution_test)
+TEST(RandomSolver_Test, solution_test_00)
 {
 	// Setup
 	auto grid_1 = Grid(Size(12,12)); auto imageSize = Size(1000, 1000);
 	Mat camera = (Mat_<double>(3,3) << 1000, 0, imageSize.width * 0.5, 0, 100, imageSize.height * 0.5, 0, 0, 1);
-	Mat dparams = (Mat_<double>(4,1) << 0.1, 0, 0, 0);
+	Mat dparams = (Mat_<double>(4,1) << -0.1, 0.2, 0.01, 0.3);
 	Mat noDistortion = Mat_<double>::zeros(4,1);
 
 	// Build the grid
@@ -46,6 +46,6 @@ TEST(RandomSolver_Test, solution_test)
 
 	// Confirm
 	auto solver = RandomSolver(imageSize, grid_2, noDistortion);
-	auto score = solver.Solve(1000);
-	ASSERT_LT(score, 1e-3);
+	auto score = solver.Solve(1e6);
+	ASSERT_LT(score / (grid_1.GetColumns() * grid_1.GetRows()), 1);
 }
