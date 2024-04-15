@@ -38,9 +38,11 @@ Engine::Engine(NVLib::Logger* logger, NVLib::Parameters* parameters)
 
     _logger->Log(1, "Setup a callback object");
     auto callback = ImageCallback(grid->GetImagePointMatrix());
-    callback.Callback(0, -1, Mat(), Mat());
-    waitKey();
-
+   
+    _logger->Log(1, "Refine the points that we dealing with");
+    Mat initial = Mat_<double>::zeros(4,1);
+    auto refiner = RandomSolver(imageSize, grid, initial);
+    refiner.Solve(500000, &callback);
 
     delete grid;
 }

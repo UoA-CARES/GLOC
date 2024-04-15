@@ -41,12 +41,20 @@ void ImageCallback::Callback(int iteration, double aveError, const Mat& paramete
 	auto points = vector<Point>();
 
 	auto oLink = (double *) _basePoints.data;
+	auto iLink = (double *) data.data;
+
 	for (auto i = 0; i < pixelCount; i++) 
 	{
 		auto u = (int)round(oLink[2 * i + 0]);
 		auto v = (int)round(oLink[2 * i + 1]);
 		circle(display, Point(u,v), 5, Scalar(0,0,255), FILLED);
+
+		u = (int)round(iLink[2 * i + 0]);
+		v = (int)round(iLink[2 * i + 1]);
+		circle(display, Point(u,v), 8, Scalar(0,255,0),3);
 	}
 
+	cout << iteration << ". " << parameters.t() << ": " << aveError << endl;
+	
 	imshow("Point", display); waitKey(1);
 }
