@@ -24,7 +24,6 @@ namespace NVL_App
 		Mat _basePoints;
 	public:
 		ImageCallback(Mat& basePoints);
-		virtual void Callback(double aveError, Mat& parameters, Mat& data);
-		inline Mat& GetBasePoints() { return _basePoints; }
+		virtual void Callback(int iteration, double aveError, Mat& parameters, Mat& data) override;
 	};
 }

@@ -19,6 +19,7 @@ using namespace cv;
 #include "Distortion.h"
 #include "Grid.h"
 #include "Homography.h"
+#include "CallbackBase.h"
 
 namespace NVL_App
 {
@@ -29,12 +30,11 @@ namespace NVL_App
 		Grid * _grid;
 		double _bestScore;
 		Mat _dparams;
-
 	public:
 		RandomSolver(const Size& imageSize, Grid * grid, Mat& dparams);
 		~RandomSolver();
 
-		double Solve(int maxIterators, bool verbose = true);
+		double Solve(int maxIterators, CallbackBase * callback = nullptr);
 
 		inline Distortion * GetDistortion() { return _distortion; }
 		inline Grid * GetGrid() { return _grid; }

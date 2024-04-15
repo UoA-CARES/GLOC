@@ -133,3 +133,26 @@ void Grid::SetScenePoint(const Point& location, const Point3d& point)
 	dlink[index * 5 + 3] = point.y;
 	dlink[index * 5 + 4] = point.z;
 }
+
+/**
+ * Determine a point matrix
+ */
+Mat Grid::GetImagePointMatrix() 
+{
+	Mat result = Mat_<Vec2d>::zeros(_data.size());
+
+	auto inputLink = (double *) _data.data;
+	auto outputLink = (double *) result.data;
+
+	for (auto row = 0; row < result.rows; row++) 
+	{
+		for (auto column = 0; column < result.cols; column++) 
+		{
+			auto index = column + row * result.cols;
+			outputLink[index * 2 + 0] = inputLink[index * 5 + 0];
+			outputLink[index * 2 + 1] = inputLink[index * 5 + 1];
+		}
+	}
+
+	return result;
+}

@@ -43,10 +43,10 @@ RandomSolver::~RandomSolver()
 /**
  * @brief Attempt to iterate and find solution
  * @param maxIterators The maximum number of iterations to try
- * @param verbose Indicates whether we want to see some console outputs
+ * @param callback If one is supplied, it is raised everytime a significant event occurs
  * @return double Returns a double
  */
-double RandomSolver::Solve(int maxIterators, bool verbose)
+double RandomSolver::Solve(int maxIterators, CallbackBase * callback)
 {
 	Mat dparams = _dparams.clone(); 
 	

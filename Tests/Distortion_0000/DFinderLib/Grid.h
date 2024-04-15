@@ -34,6 +34,8 @@ namespace NVL_App
 		void SetImagePoint(const Point& location, const Point2d& point);
 		void SetScenePoint(const Point& location, const Point3d& point);
 
+		Mat GetImagePointMatrix();
+
 		inline Mat& GetData() { return _data; }
 	};
 }
