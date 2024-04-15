@@ -12,6 +12,20 @@
 using namespace NVL_App;
 
 //--------------------------------------------------
+// Class Definition
+//--------------------------------------------------
+
+class TestCallback : public CallbackBase 
+{
+public:
+	TestCallback() : CallbackBase() {}
+	virtual void Callback(int iteration, double aveError, Mat& parameters, Mat& data) override 
+	{
+		cout << iteration << ". " << parameters.t() << ": " << aveError << endl;
+	}
+};
+
+//--------------------------------------------------
 // Function Prototypes
 //--------------------------------------------------
 extern void AddGridPoint(Grid * grid, const Point& index, const Point3d& scenePoint, Mat& camera);
@@ -46,6 +60,7 @@ TEST(RandomSolver_Test, solution_test_00)
 
 	// Confirm
 	auto solver = RandomSolver(imageSize, grid_2, noDistortion);
-	auto score = solver.Solve(300000);
+	auto callback = TestCallback();
+	auto score = solver.Solve(300000, &callback);
 	ASSERT_LT(score / (grid_1.GetColumns() * grid_1.GetRows()), 1);
 }
