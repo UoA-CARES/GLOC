@@ -17,9 +17,9 @@ using namespace NVL_App;
  * @brief Custom Constructor
  * @param basePoints The base point
  */
-ImageCallback::ImageCallback(Mat& basePoints)
+ImageCallback::ImageCallback(Mat& basePoints) : _basePoints(basePoints)
 {
-	throw runtime_error("Not implemented");
+	// Main Constructor
 }
 
 //--------------------------------------------------
@@ -35,5 +35,18 @@ ImageCallback::ImageCallback(Mat& basePoints)
  */
 void ImageCallback::Callback(int iteration, double aveError, Mat& parameters, Mat& data)
 {
-	throw runtime_error("Not implemented");
+	Mat display = Mat_<Vec3d>::zeros(1000,1000);
+	auto pixelCount = _basePoints.rows * _basePoints.cols;
+
+	auto points = vector<Point>();
+
+	auto oLink = _basePoints.data;
+	for (auto i = 0; i < pixelCount; i++) 
+	{
+		auto u = (int)round(oLink[2 * i + 0]);
+		auto v = (int)round(oLink[2 * i + 1]);
+		circle(display, Point(u,v), 5, Scalar(0,0,255), FILLED);
+	}
+
+	imshow("Point", display); waitKey(1);
 }

@@ -26,6 +26,19 @@ Engine::Engine(NVLib::Logger* logger, NVLib::Parameters* parameters)
     auto database = ArgUtils::GetString(parameters, "database");
     auto dataset = ArgUtils::GetString(parameters, "dataset");
     _pathHelper = new NVLib::PathHelper(database, dataset);
+
+    _logger->Log(1, "Load points");
+    auto pointFolder = ArgUtils::GetString(parameters, "pointset");
+    auto grid = PointLoader::GetPoints(_pathHelper, pointFolder);
+
+    _logger->Log(1, "Get image size");
+    auto testImagePath = _pathHelper->GetPath(pointFolder, "image.png");
+    Mat testImage = imread(testImagePath); if (testImage.empty()) throw runtime_error("Unable to find test image: " + testImagePath);
+    auto imageSize = testImage.size();
+
+
+
+    delete grid;
 }
 
 /**

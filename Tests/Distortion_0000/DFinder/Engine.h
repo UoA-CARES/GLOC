@@ -13,7 +13,9 @@ using namespace std;
 
 #include <NVLib/Logger.h>
 #include <NVLib/Path/PathHelper.h>
+
 #include <DFinderLib/ArgUtils.h>
+#include <DFinderLib/PointLoader.h>
 
 namespace NVL_App
 {
