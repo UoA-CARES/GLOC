@@ -2,6 +2,22 @@
 
 **Diary Nodes**
 
+**18 April 2024**
+
+So far, the following successes have been achieved:
+
+* A synthetic point generator, that can basically create points for the purpose of testing whether I can acquire the original configuration.
+* A random search based distortion estimation engine, that can estimate the distortion for a single homography.
+
+The next set of goals are built around the problem of calibrating a given set of "real world" images. The following are expected to be the related tasks:
+
+* Create a point convert to extract point measurements from the calibration tool.
+* Update Distortion Estimator to process two homographies (left and right).
+* Extract the calibration parameters for a single image with two calibration grids.
+* Build a stereo finder for the system.
+* Test with stereo matching.
+* Test with stereo size estimation.
+
 **05 March 2024**
 
 So I am working towards distortion estimation from images. The first step is to do this with synthetic images. Therefore, the following steps are next:
