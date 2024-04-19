@@ -61,3 +61,53 @@ NVL_App::Board * LoadUtils::GetBoard(const string& line)
 	auto stream = stringstream(line); stream >> i >> gridRows >> gridCols >> blockRows >> blockCols;
 	return new NVL_App::Board(Size(gridCols, gridRows), Size(blockCols, blockRows));
 }
+
+//--------------------------------------------------
+// Load Grid
+//--------------------------------------------------
+
+/**
+ * Load the points for the grid
+ * @param pHelper The associated path helper
+ * @param settings The settings describing the grid elements
+ * @param cameraId The camera that we want the points for
+ * @param gridId The grid that we are dealing with
+ * @return The points that have been loaded
+*/
+static unique_ptr<Grid> LoadGrid(NVLib::PathHelper * pHelper, Settings * settings, int cameraId, int gridId) 
+{
+	// Define the name of the points file
+	auto fileName = stringstream(); fileName << "Camera_" << cameraId << "Points_" << gridId << ".txt";
+
+	// Defines the path to the points files
+	auto path = pHelper->GetPath("Tool_Output", fileName.str());
+
+	// Create variables to hold points
+	auto imagePoints = vector<Point2d>(); auto scenePoints = vector<Point3d>();
+
+	// Open the points file
+	auto reader = ifstream(path); if (!reader.is_open()) throw runtime_error("Unable to open file: " + path);
+
+	// Get the relevant board parameters
+	auto board = settings->GetBoard(cameraId + 1);
+
+	// Conduct the actual loading stuff
+	for (auto row = 0; row < board->GetGridSize().height; row++) 
+	{
+		for (auto column = 0; column < board->GetGridSize().width; column++) 
+		{
+			auto u = 0.0, v = 0.0; reader >> u >> v;
+			auto X = column * board->GetBoardSize().width;
+			auto Y = row * board->GetBoardSize().height;
+			auto Z = 0.0;
+
+			imagePoints.push_back(Point2d(u,v)); scenePoints.push_back(Point3d(X, Y, Z));
+		}
+	}
+
+	// close the file
+	reader.close();
+
+	// Return the result
+	return unique_ptr<Grid>(new Grid(scenePoints, imagePoints));
+}

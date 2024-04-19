@@ -22,6 +22,7 @@ namespace NVL_App
 	{
 	public:
 		static unique_ptr<Settings> LoadBoardSettings(NVLib::PathHelper * pathHelper);
+		static unique_ptr<Grid> LoadGrid(NVLib::PathHelper * pHelper, Settings * settings, int cameraId, int gridId);
 	private:
 		static NVL_App::Board * GetBoard(const string& line);
 	};
