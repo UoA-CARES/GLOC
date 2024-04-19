@@ -20,5 +20,7 @@ namespace NVL_App
 	{
 	public:
 		static unique_ptr<Settings> LoadBoardSettings(NVLib::PathHelper * pathHelper);
+	private:
+		static NVL_App::Board * GetBoard(const string& line);
 	};
 }
