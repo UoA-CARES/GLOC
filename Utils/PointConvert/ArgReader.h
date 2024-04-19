@@ -112,9 +112,9 @@ namespace NVL_Utils
         inline static string GetParamKeys() 
         {
             const char * keys = 
-                "{ help h usage ?   |                       | Show help message                                 }"
-                "{ database         | /home/trevor/Data     | The location of the database within the system    }"
-                "{ dataset          | dataset               | The name of the dataset that we are using         }";
+                "{ help h usage ?   |                                       | Show help message                                 }"
+                "{ database         | /home/trevor/Research/GLOC/Data       | The location of the database within the system    }"
+                "{ dataset          | Calib_0001                            | The name of the dataset that we are using         }";
  
             return string(keys);
         }

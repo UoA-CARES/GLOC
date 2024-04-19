@@ -17,6 +17,7 @@ using namespace std;
 using namespace cv;
 
 #include "ArgReader.h"
+#include "LoadUtils.h"
 
 //--------------------------------------------------
 // Function Prototypes
@@ -37,10 +38,13 @@ void Run(NVLib::Parameters * parameters)
 
     logger.StartApplication();
 
-    // Create a helper for path tracking
+    logger.Log(1, "Create a path helper");
     auto database = NVL_Utils::ArgReader::ReadString(parameters, "database");
     auto dataset = NVL_Utils::ArgReader::ReadString(parameters, "dataset");
     auto pathHelper = NVLib::PathHelper(database, dataset);
+
+    logger.Log(1, "Load the given board settings");
+    auto boardSettings = NVL_App::LoadUtils::LoadBoardSettings(&pathHelper);
 
     logger.StopApplication();
 }

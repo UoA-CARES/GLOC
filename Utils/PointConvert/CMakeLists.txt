@@ -32,6 +32,8 @@ set_target_properties(NVLib PROPERTIES
 # Create the executable
 add_executable(PointConvert
     Source.cpp
+    Settings.cpp
+    LoadUtils.cpp
 )
 
 # Add link libraries                               
