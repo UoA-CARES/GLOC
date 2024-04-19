@@ -50,6 +50,8 @@ void Run(NVLib::Parameters * parameters)
     logger.Log(1, "Load image size");
     auto imageSize = GetImageSize(&pathHelper);
 
+    logger.Log(1, "Load the grid variables");
+
     logger.StopApplication();
 }
 

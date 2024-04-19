@@ -12,6 +12,8 @@
 using namespace std;
 
 #include <NVLib/Path/PathHelper.h>
+
+#include "Grid.h"
 #include "Settings.h"
 
 namespace NVL_App

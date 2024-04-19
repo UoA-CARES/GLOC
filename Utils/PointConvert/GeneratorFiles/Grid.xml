@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+
+<class>
+
+<namespace>NVL_App</namespace>
+<solution>F</solution>
+<name>Grid</name>
+<description>Defines a grid within the system</description>
+
+<includes>
+    <include name="iostream" namespace="std" local="false" />
+    <include name="opencv2/opencv.hpp" namespace="cv" local="false" />
+</includes>
+
+<variables>
+    <variable type="vector<Point3d>" name="scenePoints" code="10" />
+    <variable type="vector<Point2d>" name="imagePoints" code="10" />
+</variables>
+
+<constructors>
+
+    <!-- Main Constructor -->
+    <constructor type="auto" inline="true" />
+
+</constructors>
+
+</class>
