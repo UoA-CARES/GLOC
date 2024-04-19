@@ -23,6 +23,7 @@ using namespace cv;
 // Function Prototypes
 //--------------------------------------------------
 void Run(NVLib::Parameters * parameters);
+Size GetImageSize(NVLib::PathHelper * pathHelper);
 
 //--------------------------------------------------
 // Execution Logic
@@ -46,7 +47,31 @@ void Run(NVLib::Parameters * parameters)
     logger.Log(1, "Load the given board settings");
     auto boardSettings = NVL_App::LoadUtils::LoadBoardSettings(&pathHelper);
 
+    logger.Log(1, "Load image size");
+    auto imageSize = GetImageSize(&pathHelper);
+
     logger.StopApplication();
+}
+
+//--------------------------------------------------
+// Helper Size
+//--------------------------------------------------
+
+/**
+ * Get the image size that we are dealing with
+ * @param pathHelper That we are finding
+ * @return The size of the image that we are getting
+*/
+Size GetImageSize(NVLib::PathHelper * pathHelper) 
+{
+    // Get the image path
+    auto path = pathHelper->GetPath("Tool_Output", "Camera_0_Image_0.jpg");
+
+    // Load the image
+    Mat image = imread(path); if (image.empty()) throw runtime_error("Unable to find: " + path);
+
+    // Return 
+    return image.size();
 }
 
 //--------------------------------------------------
