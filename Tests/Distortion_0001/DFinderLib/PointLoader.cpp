@@ -40,6 +40,22 @@ int PointLoader::GetGridCount(NVLib::PathHelper * pathHelper)
 	return count;
 }
 
+//--------------------------------------------------
+// Get Image Size
+//--------------------------------------------------
+
+/**
+ * Add the logic to get the associated image size
+ * @param pathHelper The path that we are loading from
+ * @param folder The folder that we are getting the image from
+ * @param imageName The name of the image that we are getting
+*/
+Size PointLoader::GetImageSize(NVLib::PathHelper * pathHelper, const string& folder, const string& imageName) 
+{
+ 	auto path = pathHelper->GetPath(folder, imageName);
+    Mat image = imread(path); if (image.empty()) throw runtime_error("Unable to find test image: " + path);
+   	return image.size();
+}
 
 //--------------------------------------------------
 // Load
@@ -48,17 +64,16 @@ int PointLoader::GetGridCount(NVLib::PathHelper * pathHelper)
 /**
  * Load a list of grids from disk
  * @param pathHelper a helper for resolving the paths to the file
- * @param folder The folder that we are updating
  * @param gridCount The number of grids that we want to load
  * @return The grid list that we are dealing with
  */
-unique_ptr<GridList> PointLoader::GetGridList(NVLib::PathHelper * pathHelper, const string& folder, int gridCount) 
+unique_ptr<GridList> PointLoader::GetGridList(NVLib::PathHelper * pathHelper, int gridCount) 
 {
 	auto result = new GridList();
 
 	for (auto i = 0; i < gridCount; i++) 
 	{
-		auto grid = GetGrid(pathHelper, folder, i);
+		auto grid = GetGrid(pathHelper, "Points", i);
 		result->Add(grid);
 	}
 
@@ -75,7 +90,7 @@ unique_ptr<GridList> PointLoader::GetGridList(NVLib::PathHelper * pathHelper, co
 Grid * PointLoader::GetGrid(NVLib::PathHelper * pathHelper, const string& folder, int gridCount)
 {
 	// Create a reader for reading in the data
-	auto path = pathHelper->GetPath(folder, NVLib::Formatter() << "point_" << setw(4) << setfill('0') << gridCount << ".txt");
+	auto path = pathHelper->GetPath(folder, NVLib::Formatter() << "points_" << setw(4) << setfill('0') << gridCount << ".txt");
 	auto reader = ifstream(path); if (!reader.is_open()) throw runtime_error("Unable to open: " + path);
 
 	// Create a row and column indices

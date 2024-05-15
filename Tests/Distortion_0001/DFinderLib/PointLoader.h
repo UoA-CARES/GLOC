@@ -26,7 +26,8 @@ namespace NVL_App
 	{
 	public:
 		static int GetGridCount(NVLib::PathHelper * pathHelper);
-		static unique_ptr<GridList> GetGridList(NVLib::PathHelper * pathHelper, const string& folder, int gridCount);
+		static Size GetImageSize(NVLib::PathHelper * pathHelper, const string& folder, const string& imageName);
+		static unique_ptr<GridList> GetGridList(NVLib::PathHelper * pathHelper, int gridCount);
 		static Grid * GetGrid(NVLib::PathHelper * pathHelper, const string& folder, int gridCount);
 	private:
 		static bool ReadLine(istream& reader, vector<double>& values);

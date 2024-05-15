@@ -50,14 +50,13 @@ void Engine::Run()
     _logger->Log(1, "Number of grids found: %i", gridCount);
     if (gridCount == 0) throw runtime_error("At least 1 grid is required to perform the optimization");
 
-    //_logger->Log(1, "Load points");
-    //auto grids = PointLoader::GetGrid(_pathHelper, _pointFolder);
+    _logger->Log(1, "Loading Grids from disk");
+    auto grids = PointLoader::GetGridList(_pathHelper, gridCount);
 
-    // _logger->Log(1, "Get image size");
-    // auto testImagePath = _pathHelper->GetPath(_pointFolder, "image.png");
-    // Mat testImage = imread(testImagePath); if (testImage.empty()) throw runtime_error("Unable to find test image: " + testImagePath);
-    // auto imageSize = testImage.size();
-
+    _logger->Log(1, "Determining the image size");
+    auto imageSize = PointLoader::GetImageSize(_pathHelper, "Images", "left.png");
+    _logger->Log(1, "Image Size: %i x %i", imageSize.width, imageSize.height);
+   
     // _logger->Log(1, "Setup a callback object");
     // auto callback = ImageCallback(grid->GetImagePointMatrix());
    
