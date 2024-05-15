@@ -77,7 +77,7 @@ NVL_App::Board * LoadUtils::GetBoard(const string& line)
 unique_ptr<Grid> LoadUtils::LoadGrid(NVLib::PathHelper * pHelper, Settings * settings, int cameraId, int gridId) 
 {
 	// Define the name of the points file
-	auto fileName = stringstream(); fileName << "Camera_" << cameraId << "Points_" << gridId << ".txt";
+	auto fileName = stringstream(); fileName << "Camera_" << cameraId << "_Points_" << gridId << ".txt";
 
 	// Defines the path to the points files
 	auto path = pHelper->GetPath("Tool_Output", fileName.str());

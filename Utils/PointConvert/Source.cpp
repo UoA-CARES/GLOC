@@ -24,6 +24,7 @@ using namespace cv;
 //--------------------------------------------------
 void Run(NVLib::Parameters * parameters);
 Size GetImageSize(NVLib::PathHelper * pathHelper);
+void SaveGrid(NVLib::PathHelper * helper, NVL_App::Grid * grid, int index);
 
 //--------------------------------------------------
 // Execution Logic
@@ -59,6 +60,9 @@ void Run(NVLib::Parameters * parameters)
     auto grid_1 = NVL_App::LoadUtils::LoadGrid(&pathHelper, boardSettings.get(), cameraId, 0);
     auto grid_2 = NVL_App::LoadUtils::LoadGrid(&pathHelper, boardSettings.get(), cameraId, 1);
 
+    logger.Log(1, "Writing output files");
+    SaveGrid(&pathHelper, grid_1.get(), 0); SaveGrid(&pathHelper, grid_2.get(), 1);
+
     logger.StopApplication();
 }
 
@@ -81,6 +85,32 @@ Size GetImageSize(NVLib::PathHelper * pathHelper)
 
     // Return 
     return image.size();
+}
+
+//--------------------------------------------------
+// Save Functionality
+//--------------------------------------------------
+
+/**
+ * Defines save functionality for the grid
+ * @param helper The helper element that we are using to perform the save
+*/
+void SaveGrid(NVLib::PathHelper * helper, NVL_App::Grid * grid, int index) 
+{
+    auto fileName = stringstream(); fileName << "points_" << setw(4) << setfill('0') << index << ".txt";
+    auto path = helper->GetPath("Points", fileName.str());
+
+    auto writer = ofstream(path);
+
+    for (auto i = 0; i < grid->GetPointCount(); i++) 
+    {
+        auto iPoint = grid->GetImagePoints()[i];
+        auto sPoint = grid->GetScenePoints()[i];
+
+        writer << sPoint.x << "," << sPoint.y << "," << sPoint.z << "," << iPoint.x << "," << iPoint.y << endl;
+    }
+
+    writer.close();
 }
 
 //--------------------------------------------------

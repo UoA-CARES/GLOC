@@ -25,6 +25,12 @@ namespace NVL_App
 		Grid(vector<Point3d>& scenePoints, vector<Point2d>& imagePoints) :
 			_scenePoints(scenePoints), _imagePoints(imagePoints) {}
 
+		inline int GetPointCount() 
+		{
+			assert(_scenePoints.size() == _imagePoints.size());
+			return _scenePoints.size();
+		}
+
 		inline vector<Point3d>& GetScenePoints() { return _scenePoints; }
 		inline vector<Point2d>& GetImagePoints() { return _imagePoints; }
 	};
