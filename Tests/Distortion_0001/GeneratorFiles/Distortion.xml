@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+
+<class>
+
+<namespace>NVL_App</namespace>
+<solution>DFinderLib</solution>
+<name>Distortion</name>
+<description>A wrapper for the distortion logic</description>
+
+<includes>
+    <include name="iostream" namespace="std" local="false" />
+    <include name="opencv2/opencv.hpp" namespace="cv" local="false" />
+    <include name="Grid.h" local="true" />
+</includes>
+
+<variables>
+    <variable type="Mat" name="camera" code="10" />
+    <variable type="Mat" name="distortionParams" code="10" />
+</variables>
+
+<constructors>
+
+    <constructor type="custom" inline="false">
+        <parameter type="Grid *" name="grid" description="The grid that estimating from" />
+    </constructor>
+
+</constructors>
+
+<methods>
+
+    <!-- Perform an undistortion operation -->
+    <method section="UnDistort" access="public" return="Grid *" name="Undistort" description="Create an undistorted grid" inline="false">
+        <parameter type="Grid *" name="grid" description="The grid that we are dealing with" />
+        <parameter type="Mat&" name="dparams" description="The distortion parameters" />
+    </method>
+
+</methods>
+
+<tests>
+    <test name="distortion_test" description="Convert the numbers" exception="false" />
+</tests> 
+
+</class>

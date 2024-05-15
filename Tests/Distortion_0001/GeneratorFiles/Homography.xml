@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+
+<class>
+
+<namespace>NVL_App</namespace>
+<solution>DFinderLib</solution>
+<name>Homography</name>
+<description>A helper class for Homography type operations</description>
+
+<includes>
+    <include name="iostream" namespace="std" local="false" />
+    <include name="opencv2/opencv.hpp" namespace="cv" local="false" />
+    <include name="grid.h" local="true" />
+</includes>
+
+<methods>
+
+    <!-- Generate a homography from a grid -->
+    <method section="Generate" modifiers="static" access="public" return="Mat" name="GetHomography" description="Determine the existing homography" inline="false">
+        <parameter type="Grid *" name="grid" description="The grid that we are processing" />
+    </method>    
+
+    <!-- Determine the error of the homography -->
+    <method section="Scoring" modifiers="static" access="public" return="double" name="GetHScore" description="Determine the score of the homography fit" inline="false">
+        <parameter type="Mat&" name="H" description="The homography that we are testing against" />
+        <parameter type="Grid *" name="grid" description="The grid that we are processing" />
+    </method>    
+
+    <!-- Calculate points from homography -->
+    <method section="Generation" modifiers="static" access="public" return="Point2d" name="Transform" description="Transform a world coordinate into an image coordinate" inline="false">
+        <parameter type="Mat&" name="H" description="The homography that we are working with" />
+        <parameter type="const Point3d&" name="point" description="The point that we are converting" />
+    </method>    
+
+</methods>
+
+<tests>
+    <test name="h_fitting" description="The logic of fitting a homography to data" exception="false" />
+    <test name="h_score" description="The logic of scoring a homography against actual points" exception="false" />
+</tests> 
+
+</class>
