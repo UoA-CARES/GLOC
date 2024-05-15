@@ -1,7 +1,5 @@
 <?xml version="1.0"?>
 <opencv_storage>
     <database>"/home/trevor/Research/GLOC/Data"</database>
-    <dataset>"Distortion"</dataset>
-    <folder>""</folder>
-    <setcount>"2"</setcount>
+    <dataset>"Calib_0001"</dataset>
 </opencv_storage>

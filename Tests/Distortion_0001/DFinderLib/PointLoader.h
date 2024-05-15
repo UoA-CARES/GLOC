@@ -16,6 +16,7 @@ using namespace cv;
 
 #include <NVLib/Path/PathHelper.h>
 #include <NVLib/Formatter.h>
+#include <NVLib/FileUtils.h>
 
 #include "GridList.h"
 
@@ -24,6 +25,7 @@ namespace NVL_App
 	class PointLoader
 	{
 	public:
+		static int GetGridCount(NVLib::PathHelper * pathHelper);
 		static unique_ptr<GridList> GetGridList(NVLib::PathHelper * pathHelper, const string& folder, int gridCount);
 		static Grid * GetGrid(NVLib::PathHelper * pathHelper, const string& folder, int gridCount);
 	private:

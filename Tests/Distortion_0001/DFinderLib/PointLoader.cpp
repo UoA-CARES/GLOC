@@ -10,6 +10,38 @@
 using namespace NVL_App;
 
 //--------------------------------------------------
+// Grid Count
+//--------------------------------------------------
+
+/**
+ * Retrieve the number of grids within the system
+ * @param pathHelper A helper for resolving the paths
+ * @return The number of grids that were actually found
+ */
+int PointLoader::GetGridCount(NVLib::PathHelper * pathHelper) 
+{
+	// Generate the path
+	auto path = pathHelper->GetPath("Points", string());
+
+	// Retrieve the files that are in the folder
+	auto fileList = vector<string>(); NVLib::FileUtils::GetFileList(path, fileList);
+
+	// Create a variable to hold the count
+	auto count = 0;
+
+	// count the number of files with a "txt" extension
+	for (auto& file : fileList) 
+	{
+		auto extension = NVLib::FileUtils::GetExtension(file);
+		if (extension == "txt") count++;
+	}
+
+	// Return the variable
+	return count;
+}
+
+
+//--------------------------------------------------
 // Load
 //--------------------------------------------------
 

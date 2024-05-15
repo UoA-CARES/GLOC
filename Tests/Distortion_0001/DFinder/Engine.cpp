@@ -26,7 +26,6 @@ Engine::Engine(NVLib::Logger* logger, NVLib::Parameters* parameters)
     auto database = ArgUtils::GetString(parameters, "database");
     auto dataset = ArgUtils::GetString(parameters, "dataset");
     _pathHelper = new NVLib::PathHelper(database, dataset);
-    _pointFolder = ArgUtils::GetString(parameters, "pointset");
 }
 
 /**
@@ -46,8 +45,13 @@ Engine::~Engine()
  */
 void Engine::Run()
 {
-    _logger->Log(1, "Load points");
-    auto grids = PointLoader::GetGrid(_pathHelper, _pointFolder);
+    _logger->Log(1, "Determining how many point sets there are...");
+    auto gridCount = PointLoader::GetGridCount(_pathHelper);
+    _logger->Log(1, "Number of grids found: %i", gridCount);
+    if (gridCount == 0) throw runtime_error("At least 1 grid is required to perform the optimization");
+
+    //_logger->Log(1, "Load points");
+    //auto grids = PointLoader::GetGrid(_pathHelper, _pointFolder);
 
     // _logger->Log(1, "Get image size");
     // auto testImagePath = _pathHelper->GetPath(_pointFolder, "image.png");
