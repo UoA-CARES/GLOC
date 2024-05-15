@@ -44,13 +44,20 @@ void Run(NVLib::Parameters * parameters)
     auto dataset = NVL_Utils::ArgReader::ReadString(parameters, "dataset");
     auto pathHelper = NVLib::PathHelper(database, dataset);
 
+    logger.Log(1, "Load the camera Id");
+    auto cameraId = NVL_Utils::ArgReader::ReadInteger(parameters, "cameraId");
+    logger.Log(1, "The cameraId: %i", cameraId);
+
     logger.Log(1, "Load the given board settings");
     auto boardSettings = NVL_App::LoadUtils::LoadBoardSettings(&pathHelper);
 
     logger.Log(1, "Load image size");
     auto imageSize = GetImageSize(&pathHelper);
+    logger.Log(1, "Image Size: %i x %i", imageSize.width, imageSize.height);
 
     logger.Log(1, "Load the grid variables");
+    auto grid_1 = NVL_App::LoadUtils::LoadGrid(&pathHelper, boardSettings.get(), cameraId, 0);
+    auto grid_2 = NVL_App::LoadUtils::LoadGrid(&pathHelper, boardSettings.get(), cameraId, 1);
 
     logger.StopApplication();
 }

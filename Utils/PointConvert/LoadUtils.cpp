@@ -74,7 +74,7 @@ NVL_App::Board * LoadUtils::GetBoard(const string& line)
  * @param gridId The grid that we are dealing with
  * @return The points that have been loaded
 */
-static unique_ptr<Grid> LoadGrid(NVLib::PathHelper * pHelper, Settings * settings, int cameraId, int gridId) 
+unique_ptr<Grid> LoadUtils::LoadGrid(NVLib::PathHelper * pHelper, Settings * settings, int cameraId, int gridId) 
 {
 	// Define the name of the points file
 	auto fileName = stringstream(); fileName << "Camera_" << cameraId << "Points_" << gridId << ".txt";

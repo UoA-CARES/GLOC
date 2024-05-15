@@ -47,7 +47,7 @@ Engine::~Engine()
 void Engine::Run()
 {
     _logger->Log(1, "Load points");
-    //auto grid = PointLoader::GetGrid(_pathHelper, _pointFolder);
+    auto grids = PointLoader::GetGrid(_pathHelper, _pointFolder);
 
     // _logger->Log(1, "Get image size");
     // auto testImagePath = _pathHelper->GetPath(_pointFolder, "image.png");

@@ -22,7 +22,15 @@ using namespace NVL_App;
  */
 unique_ptr<GridList> PointLoader::GetGridList(NVLib::PathHelper * pathHelper, const string& folder, int gridCount) 
 {
-	throw runtime_error("Not implemented");
+	auto result = new GridList();
+
+	for (auto i = 0; i < gridCount; i++) 
+	{
+		auto grid = GetGrid(pathHelper, folder, i);
+		result->Add(grid);
+	}
+
+	return unique_ptr<GridList>(result);
 }
 
 /**
