@@ -56,5 +56,5 @@ void ImageCallback::Callback(int iteration, double aveError, const Mat& paramete
 
 	cout << iteration << ". " << parameters.t() << ": " << aveError << endl;
 	
-	imshow("Point", display); waitKey();
+	imshow("Point", display); waitKey(1);
 }

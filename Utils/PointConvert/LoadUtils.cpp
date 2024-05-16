@@ -58,7 +58,7 @@ unique_ptr<Settings> LoadUtils::LoadBoardSettings(NVLib::PathHelper * pathHelper
 NVL_App::Board * LoadUtils::GetBoard(const string& line) 
 {
 	auto i = 0, gridRows = 0, gridCols = 0; auto blockRows = 0.0, blockCols = 0.0;
-	auto stream = stringstream(line); stream >> i >> gridRows >> gridCols >> blockRows >> blockCols;
+	auto stream = stringstream(line); stream >> i >> gridCols >> gridRows >> blockCols >> blockRows;
 	return new NVL_App::Board(Size(gridCols, gridRows), Size(blockCols, blockRows));
 }
 

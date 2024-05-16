@@ -66,7 +66,7 @@ double RandomSolver::Solve(int maxIterators, int sensitivity, CallbackBase * cal
 
 		Mat pointMat; auto score = CalculateScore(dparams, pointMat);
 	
-		if (score <= _bestScore) 
+		if (score < _bestScore) 
 		{
 			_bestScore = score;
 			
@@ -137,6 +137,6 @@ double RandomSolver::CalculateScore(Mat & dparams, Mat& points)
 double RandomSolver::GetNumber(int order) 
 {
 	auto number = NVLib::RandomUtils::GetInteger(-1000, 1000) / 1000.0;
-	auto factor = 1.0; for (auto i = 0; i < order; i++) factor /= 10.0;
+	auto factor = 0.1; for (auto i = 0; i < order; i++) factor /= 10.0;
 	return number * factor;
 }

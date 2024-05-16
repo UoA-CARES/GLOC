@@ -19,7 +19,7 @@ using namespace NVL_App;
  */
 Distortion::Distortion(const Size& imageSize)
 {
-	auto f = max(imageSize.width, imageSize.height) * 2;
+	auto f = max(imageSize.width, imageSize.height) * 1;
 	auto cx = imageSize.width * 0.5; auto cy = imageSize.height * 0.5;
 	_camera = (Mat_<double>(3,3) << f, 0, cx, 0, f, cy, 0, 0, 1);
 }
