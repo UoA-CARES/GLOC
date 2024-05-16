@@ -56,10 +56,10 @@ double RandomSolver::Solve(int maxIterators, int sensitivity, CallbackBase * cal
 
 	for (auto i = 0; i < maxIterators; i++) 
 	{
-		for (auto j = 0; j < 4; j++) dlink_1[j] = dlink_2[j];
+		for (auto j = 0; j < _dparams.rows; j++) dlink_1[j] = dlink_2[j];
 
 		auto order = NVLib::RandomUtils::GetInteger(0, 2);
-		auto index = NVLib::RandomUtils::GetInteger(0, 4);
+		auto index = NVLib::RandomUtils::GetInteger(0, _dparams.rows);
 		auto delta = GetNumber(order);
 
 		dlink_1[index] += delta;
@@ -75,7 +75,7 @@ double RandomSolver::Solve(int maxIterators, int sensitivity, CallbackBase * cal
 				callback->Callback(i, score, dparams, pointMat);
 			}
 
-			for (auto j = 0; j < 4; j++) dlink_2[j] = dlink_1[j];
+			for (auto j = 0; j < _dparams.rows; j++) dlink_2[j] = dlink_1[j];
 
 			noUpdate = 0;
 		}

@@ -19,6 +19,8 @@ using namespace std;
 #include <DFinderLib/ImageCallback.h>
 #include <DFinderLib/RandomSolver.h>
 
+#define DISTORTION_COEFFICIENTS 5
+
 namespace NVL_App
 {
 	class Engine
