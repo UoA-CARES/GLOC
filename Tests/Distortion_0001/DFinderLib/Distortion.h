@@ -26,8 +26,8 @@ namespace NVL_App
 		Mat _camera;
 	public:
 		Distortion(const Size& imagesize);
-		unique_ptr<Grid> Undistort(Grid * grid, Mat& dparams);
-		unique_ptr<Grid> Distort(Grid * grid, Mat& dparams);
+		unique_ptr<Grid> Undistort(Grid * grid, Mat& dparams, const Vec2d& decenter = Vec2d());
+		unique_ptr<Grid> Distort(Grid * grid, Mat& dparams, const Vec2d& decenter = Vec2d());
 
 		inline Mat& GetCamera() { return _camera; }
 	private:

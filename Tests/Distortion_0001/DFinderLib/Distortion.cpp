@@ -19,7 +19,7 @@ using namespace NVL_App;
  */
 Distortion::Distortion(const Size& imageSize)
 {
-	auto f = max(imageSize.width, imageSize.height) * 1;
+	auto f = max(imageSize.width, imageSize.height) * 5;
 	auto cx = imageSize.width * 0.5; auto cy = imageSize.height * 0.5;
 	_camera = (Mat_<double>(3,3) << f, 0, cx, 0, f, cy, 0, 0, 1);
 }
@@ -32,11 +32,16 @@ Distortion::Distortion(const Size& imageSize)
  * @brief Create an undistorted grid
  * @param grid The grid that we are dealing with
  * @param dparams The distortion parameters
+ * @param decenter Decentering
  * @return Grid * Returns a Grid *
  */
-unique_ptr<Grid> Distortion::Undistort(Grid * grid, Mat& dparams)
+unique_ptr<Grid> Distortion::Undistort(Grid * grid, Mat& dparams, const Vec2d& decenter)
 {
 	auto result = new Grid(grid->GetSize());
+
+	Mat camera = _camera.clone();
+	auto c_link = (double *) camera.data;
+	c_link[2] += decenter[0]; c_link[5] += decenter[1];
 
 	for (auto row = 0; row < grid->GetRows(); row++) 
 	{
@@ -48,7 +53,7 @@ unique_ptr<Grid> Distortion::Undistort(Grid * grid, Mat& dparams)
 
 			auto input = vector<Point2d> { imagePoint }; auto output = vector<Point2d>();
 
-			undistortPoints(input, output, _camera, dparams, noArray(), _camera);
+			undistortPoints(input, output, _camera, dparams, noArray(), camera);
 
 			result->SetScenePoint(index, scenePoint);
 			result->SetImagePoint(index, output[0]);
@@ -66,11 +71,16 @@ unique_ptr<Grid> Distortion::Undistort(Grid * grid, Mat& dparams)
  * Add the functionality to distort a grid with the given parameters
  * @param grid The grid that we are distorting
  * @param dparams The parameters associated with the distortion
+ * @param decenter A decentering parameter
  * @return The resultant grid
 */
-unique_ptr<Grid> Distortion::Distort(Grid * grid, Mat& dparams) 
+unique_ptr<Grid> Distortion::Distort(Grid * grid, Mat& dparams, const Vec2d& decenter) 
 {
 	auto result = new Grid(grid->GetSize());
+
+	Mat camera = _camera.clone();
+	auto c_link = (double *) camera.data;
+	c_link[2] += decenter[0]; c_link[5] += decenter[1];
 
 	for (auto row = 0; row < grid->GetRows(); row++) 
 	{
@@ -80,9 +90,9 @@ unique_ptr<Grid> Distortion::Distort(Grid * grid, Mat& dparams)
 			auto scenePoint = grid->GetScenePoint(index);
 			auto imagePoint = grid->GetImagePoint(index);
 
-			auto input = vector<Point3d>(); BuildProjectInput(_camera, imagePoint, input); auto output = vector<Point2d>();
+			auto input = vector<Point3d>(); BuildProjectInput(camera, imagePoint, input); auto output = vector<Point2d>();
 
-			projectPoints(input, Vec3d(), Vec3d(), _camera, dparams, output);
+			projectPoints(input, Vec3d(), Vec3d(), camera, dparams, output);
 
 			result->SetScenePoint(index, scenePoint);
 			result->SetImagePoint(index, output[0]);

@@ -115,7 +115,7 @@ namespace NVL_Utils
             const char * keys = 
                 "{ help h usage ?   |                                       | Show help message                                 }"
                 "{ database         | /home/trevor/Research/GLOC/Data       | The location of the database within the system    }"
-                "{ dataset          | Calib_0001                            | The name of the dataset that we are using         }"
+                "{ dataset          | Calib_0000                            | The name of the dataset that we are using         }"
                 "{ cameraId         | 0                                     | The camera id that we want to process             }";
  
             return string(keys);

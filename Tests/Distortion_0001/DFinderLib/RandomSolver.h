@@ -31,6 +31,7 @@ namespace NVL_App
 		GridList * _grids;
 		double _bestScore;
 		Mat _dparams;
+		Vec2d _decenter;
 	public:
 		RandomSolver(const Size& imageSize, GridList * grids, Mat& dparams);
 		~RandomSolver();
@@ -43,6 +44,6 @@ namespace NVL_App
 	
 	private:
 		double GetNumber(int order);
-		double CalculateScore(Mat& dparams, Mat& points);
+		double CalculateScore(Mat& dparams, Mat& points, const Vec2d& decenter);
 	};
 }
