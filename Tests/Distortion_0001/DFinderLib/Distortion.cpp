@@ -70,6 +70,42 @@ unique_ptr<Grid> Distortion::Undistort(Grid * grid, Mat& dparams)
 */
 unique_ptr<Grid> Distortion::Distort(Grid * grid, Mat& dparams) 
 {
-	throw runtime_error("Not Implemented");
+	auto result = new Grid(grid->GetSize());
+
+	for (auto row = 0; row < grid->GetRows(); row++) 
+	{
+		for (auto column = 0; column < grid->GetColumns(); column++) 
+		{
+			auto index = Point(column, row);
+			auto scenePoint = grid->GetScenePoint(index);
+			auto imagePoint = grid->GetImagePoint(index);
+
+			auto input = vector<Point3d>(); BuildProjectInput(_camera, imagePoint, input); auto output = vector<Point2d>();
+
+			projectPoints(input, Vec3d(), Vec3d(), _camera, dparams, output);
+
+			result->SetScenePoint(index, scenePoint);
+			result->SetImagePoint(index, output[0]);
+		}
+	}
+
+	return unique_ptr<Grid>(result);
 }
 
+/**
+ * Build the project input for the system
+ * @param camera The inverse camera matrix
+ * @param point The point that we are converting
+ * @param output The output result
+*/
+void Distortion::BuildProjectInput(Mat& camera, const Point2d& point, vector<Point3d>& output) 
+{
+	// Create the vector
+	output.clear();
+
+	// Convert the point
+	auto scenePoint = NVLib::Math3D::UnProject(camera, point, 1);
+
+	// Add the output
+	output.push_back(scenePoint);
+}

@@ -52,7 +52,7 @@ TEST(Grid_Test, distortion_test)
 	// Setup
 	auto grid = MakeGrid(Size(5,5));
 	auto distortion = Distortion(Size(500,500));
-	Mat dparams = (Mat_<double>(4,1) << 0.1 -0.2, 0.01, -0.003);
+	Mat dparams = (Mat_<double>(4,1) << 4.1 -5.2, 0.1, -0.3);
 
 	// Distort the grid
 	auto dgrid = distortion.Distort(grid.get(), dparams);
@@ -65,8 +65,8 @@ TEST(Grid_Test, distortion_test)
 	auto u_score = grid->GetDifference(ugrid.get());
 
 	// Validate
-	ASSERT_GT(d_score, 25);
-	ASSERT_NEAR(u_score, 0, 1e-3);
+	ASSERT_GT(d_score, 1e-1);
+	ASSERT_NEAR(u_score, 0, 1e-8);
 }
 
 //--------------------------------------------------

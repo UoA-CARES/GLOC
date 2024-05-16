@@ -11,6 +11,8 @@
 #include <iostream>
 using namespace std;
 
+#include <NVLib/Math3D.h>
+
 #include <opencv2/opencv.hpp>
 using namespace cv;
 
@@ -28,5 +30,7 @@ namespace NVL_App
 		unique_ptr<Grid> Distort(Grid * grid, Mat& dparams);
 
 		inline Mat& GetCamera() { return _camera; }
+	private:
+		void BuildProjectInput(Mat& invCamera, const Point2d& point, vector<Point3d>& output);
 	};
 }

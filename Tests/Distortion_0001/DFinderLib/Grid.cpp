@@ -172,5 +172,20 @@ Mat Grid::GetImagePointMatrix()
 */
 double Grid::GetDifference(Grid * grid) 
 {
-	throw runtime_error("Not Implemented");
+	if (grid->GetColumns() != _data.cols || grid->GetRows() != _data.rows) throw runtime_error("The grids are not the same size, cannot find the difference!");
+
+	auto total = 0.0;
+
+	for (auto row = 0; row < _data.rows; row++) 
+	{
+		for (auto column = 0; column < _data.cols; column++) 
+		{
+			auto p_1 = GetImagePoint(Point(column, row));
+			auto p_2 = grid->GetImagePoint(Point(column, row));
+			auto delta = NVLib::Math2D::GetDistance(p_1, p_2);
+			total += delta;
+		}
+	}
+
+	return total;
 }

@@ -11,6 +11,8 @@
 #include <iostream>
 using namespace std;
 
+#include <NVLib/Math2D.h>
+
 #include <opencv2/opencv.hpp>
 using namespace cv;
 
