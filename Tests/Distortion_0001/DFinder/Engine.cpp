@@ -57,8 +57,9 @@ void Engine::Run()
     auto imageSize = PointLoader::GetImageSize(_pathHelper, "Images", "left.png");
     _logger->Log(1, "Image Size: %i x %i", imageSize.width, imageSize.height);
    
-    // _logger->Log(1, "Setup a callback object");
-    // auto callback = ImageCallback(grid->GetImagePointMatrix());
+    _logger->Log(1, "Setup a callback object");
+    Mat noDistortion = Mat_<double>::zeros(4,1);
+    auto callback = ImageCallback(grids->GetImagePoints(imageSize, noDistortion));
    
     // _logger->Log(1, "Refine the points that we dealing with");
     // Mat initial = Mat_<double>::zeros(4,1);

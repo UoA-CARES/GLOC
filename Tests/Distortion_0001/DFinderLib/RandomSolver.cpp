@@ -16,16 +16,16 @@ using namespace NVL_App;
 /**
  * @brief Custom Constructor
  * @param imageSize The size of the image that we are dealing
- * @param grid The grid parameters that we measured
+ * @param grids The list of grids that we are saving for
  * @param dparams The list of parameters that we a dealing with
  */
-RandomSolver::RandomSolver(const Size& imageSize, Grid * grid, Mat& dparams) : _grid(grid), _dparams(dparams)
+RandomSolver::RandomSolver(const Size& imageSize, GridList * grids, Mat& dparams) : _grids(grids), _dparams(dparams)
 {
-	NVLib::RandomUtils::TimeSeedRandomNumbers();
+	NVLib::RandomUtils::TimeSeedRandomNumbers(); assert(grids->GetCount() > 0);
 
-	_distortion = new Distortion(imageSize);
-	Mat H = Homography::GetHomography(_grid);
-	_bestScore = Homography::GetHScore(H, _grid);
+	//_distortion = new Distortion(imageSize);
+	//Mat H = Homography::GetHomography(_grid);
+	//_bestScore = Homography::GetHScore(H, _grid);
 }
 
 /**
@@ -49,70 +49,68 @@ RandomSolver::~RandomSolver()
  */
 double RandomSolver::Solve(int maxIterators, int sensitivity, CallbackBase * callback)
 {
-	Mat dparams = _dparams.clone(); 
+	throw runtime_error("Not Implemented");
+
+	// Mat dparams = _dparams.clone(); 
 	
-	auto dlink_1 = (double *) dparams.data;
-	auto dlink_2 = (double *) _dparams.data;
+	// auto dlink_1 = (double *) dparams.data;
+	// auto dlink_2 = (double *) _dparams.data;
 
-	int noUpdate = 0;
+	// int noUpdate = 0;
 
-	for (auto i = 0; i < maxIterators; i++) 
-	{
-		for (auto j = 0; j < 4; j++) dlink_1[j] = dlink_2[j];
+	// for (auto i = 0; i < maxIterators; i++) 
+	// {
+	// 	for (auto j = 0; j < 4; j++) dlink_1[j] = dlink_2[j];
 
-		auto order = NVLib::RandomUtils::GetInteger(0, 2);
-		auto index = NVLib::RandomUtils::GetInteger(0, 4);
-		auto delta = GetNumber(order);
+	// 	auto order = NVLib::RandomUtils::GetInteger(0, 2);
+	// 	auto index = NVLib::RandomUtils::GetInteger(0, 4);
+	// 	auto delta = GetNumber(order);
 
-		dlink_1[index] += delta;
+	// 	dlink_1[index] += delta;
 
-		auto grid = _distortion->Undistort(_grid, dparams);
-		Mat H = Homography::GetHomography(grid);
-		auto score = Homography::GetHScore(H, grid);
+	// 	auto grid = _distortion->Undistort(_grid, dparams);
+	// 	Mat H = Homography::GetHomography(grid);
+	// 	auto score = Homography::GetHScore(H, grid);
 	
-		if (score < _bestScore) 
-		{
-			_bestScore = score;
+	// 	if (score < _bestScore) 
+	// 	{
+	// 		_bestScore = score;
 			
-			if (callback != nullptr) 
-			{
-				Mat pointMat = grid->GetImagePointMatrix();
-				callback->Callback(i, score, dparams, pointMat);
-			}
+	// 		if (callback != nullptr) 
+	// 		{
+	// 			Mat pointMat = grid->GetImagePointMatrix();
+	// 			callback->Callback(i, score, dparams, pointMat);
+	// 		}
 
-			for (auto j = 0; j < 4; j++) dlink_2[j] = dlink_1[j];
+	// 		for (auto j = 0; j < 4; j++) dlink_2[j] = dlink_1[j];
 
-			noUpdate = 0;
-		}
-		else noUpdate++;
+	// 		noUpdate = 0;
+	// 	}
+	// 	else noUpdate++;
 
-		delete grid;
+	// 	delete grid;
 
-		if (noUpdate >= sensitivity) break;
-	}
+	// 	if (noUpdate >= sensitivity) break;
+	// }
 
-	return _bestScore;
+	// return _bestScore;
 }
 
 //--------------------------------------------------
-// Solver
+// Helper: Calculate scores
 //--------------------------------------------------
 
 /**
- * Get the image points that we are dealing with
- * @return A matrix containing the image points
+ * Global logic for calculating the score
+ * @param The score that is calculated
 */
-Mat RandomSolver::GetImagePoints() 
+double RandomSolver::CalculateScore() 
 {
-	auto grid = _distortion->Undistort(_grid, _dparams);
-	Mat result = grid->GetImagePointMatrix();
-	delete grid;
-
-	return result;
+	throw runtime_error("Not Implemented");
 }
 
 //--------------------------------------------------
-// Solver
+// Helper: Get Random Number
 //--------------------------------------------------
 
 /**

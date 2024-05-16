@@ -139,16 +139,20 @@ void Grid::SetScenePoint(const Point& location, const Point3d& point)
  */
 Mat Grid::GetImagePointMatrix() 
 {
-	Mat result = Mat_<Vec2d>::zeros(_data.size());
+	// Determine the number of points
+	auto pointCount = _data.rows * _data.cols;
+
+	Mat result = Mat_<double>::zeros(pointCount, 2);
 
 	auto inputLink = (double *) _data.data;
 	auto outputLink = (double *) result.data;
 
-	for (auto row = 0; row < result.rows; row++) 
+	for (auto row = 0; row < _data.rows; row++) 
 	{
-		for (auto column = 0; column < result.cols; column++) 
+		for (auto column = 0; column < _data.cols; column++) 
 		{
-			auto index = column + row * result.cols;
+			auto index = column + row * _data.cols;
+			
 			outputLink[index * 2 + 0] = inputLink[index * 5 + 0];
 			outputLink[index * 2 + 1] = inputLink[index * 5 + 1];
 		}
