@@ -160,3 +160,17 @@ Mat Grid::GetImagePointMatrix()
 
 	return result;
 }
+
+//--------------------------------------------------
+// Get Difference
+//--------------------------------------------------
+
+/**
+ * Find the difference between grids
+ * @param grid The difference that we are finding for the given grid
+ * @return The score associated with the comparison
+*/
+double Grid::GetDifference(Grid * grid) 
+{
+	throw runtime_error("Not Implemented");
+}

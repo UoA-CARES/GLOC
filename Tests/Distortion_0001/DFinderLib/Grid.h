@@ -35,6 +35,7 @@ namespace NVL_App
 		void SetScenePoint(const Point& location, const Point3d& point);
 
 		Mat GetImagePointMatrix();
+		double GetDifference(Grid * grid);
 
 		inline Mat& GetData() { return _data; }
 	};

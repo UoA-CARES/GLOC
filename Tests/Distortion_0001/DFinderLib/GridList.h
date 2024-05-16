@@ -54,10 +54,8 @@ namespace NVL_App
 	private:
 		inline Mat GetImagePoints(Grid * grid, Distortion& distortion, Mat& dparams) 
 		{
-			Grid * ugrid = distortion.Undistort(grid, dparams);
+			auto ugrid = distortion.Undistort(grid, dparams);
 			Mat result = ugrid->GetImagePointMatrix();
-			delete ugrid;
-
 			return result;
 		}
 	};

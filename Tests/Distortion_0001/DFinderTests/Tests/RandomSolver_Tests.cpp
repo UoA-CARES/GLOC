@@ -39,6 +39,8 @@ extern void AddGridPoint(Grid * grid, const Point& index, const Point3d& scenePo
  */
 TEST(RandomSolver_Test, solution_test_00)
 {
+	FAIL() << "Not implemented";
+
 	// // Setup
 	// auto grid_1 = Grid(Size(12,12)); auto imageSize = Size(1000, 1000);
 	// Mat camera = (Mat_<double>(3,3) << 1000, 0, imageSize.width * 0.5, 0, 100, imageSize.height * 0.5, 0, 0, 1);

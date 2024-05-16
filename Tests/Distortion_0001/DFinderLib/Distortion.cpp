@@ -34,7 +34,7 @@ Distortion::Distortion(const Size& imageSize)
  * @param dparams The distortion parameters
  * @return Grid * Returns a Grid *
  */
-Grid * Distortion::Undistort(Grid * grid, Mat& dparams)
+unique_ptr<Grid> Distortion::Undistort(Grid * grid, Mat& dparams)
 {
 	auto result = new Grid(grid->GetSize());
 
@@ -55,5 +55,21 @@ Grid * Distortion::Undistort(Grid * grid, Mat& dparams)
 		}
 	}
 
-	return result;
+	return unique_ptr<Grid>(result);
 }
+
+//--------------------------------------------------
+// Distort
+//--------------------------------------------------
+
+/**
+ * Add the functionality to distort a grid with the given parameters
+ * @param grid The grid that we are distorting
+ * @param dparams The parameters associated with the distortion
+ * @return The resultant grid
+*/
+unique_ptr<Grid> Distortion::Distort(Grid * grid, Mat& dparams) 
+{
+	throw runtime_error("Not Implemented");
+}
+

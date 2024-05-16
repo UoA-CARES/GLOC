@@ -46,15 +46,12 @@ TEST(Distortion_Test, distortion_test)
 	// Execute
 	auto grid_2 = Distortion(Size(640, 480)).Undistort(&grid_1, dparams);
 
-	auto delta_1 = GetDifference(Point(1,1), &grid_1, grid_2);
-	auto delta_2 = GetDifference(Point(2,2), &grid_1, grid_2);
+	auto delta_1 = GetDifference(Point(1,1), &grid_1, grid_2.get());
+	auto delta_2 = GetDifference(Point(2,2), &grid_1, grid_2.get());
 
 	// Confirm
 	ASSERT_LT(delta_1, 1e-3);
 	ASSERT_GT(delta_2, 1.0);
-
-	// Teardown
-	delete grid_2;
 }
 
 //--------------------------------------------------

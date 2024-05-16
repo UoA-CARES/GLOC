@@ -101,13 +101,16 @@ double RandomSolver::CalculateScore(Mat & dparams)
 {
 	auto totalScore = 0.0;
 
+	cout << dparams.t() << endl;
+
 	for (auto grid : _grids->GetData())
 	{
 		auto current = _distortion->Undistort(grid, dparams);
-		Mat H = Homography::GetHomography(current);
-		auto score = Homography::GetHScore(H, current);
+		Mat H = Homography::GetHomography(current.get());
+		auto score = Homography::GetHScore(H, current.get());
 		totalScore += score;
-		delete current;
+
+		break;
 	}
 
 	return totalScore;
