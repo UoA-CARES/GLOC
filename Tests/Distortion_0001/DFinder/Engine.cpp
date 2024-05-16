@@ -61,17 +61,14 @@ void Engine::Run()
     Mat noDistortion = Mat_<double>::zeros(4,1);
     auto callback = ImageCallback(grids->GetImagePoints(imageSize, noDistortion));
    
-    // _logger->Log(1, "Refine the points that we dealing with");
-    // Mat initial = Mat_<double>::zeros(4,1);
-    // auto refiner = RandomSolver(imageSize, grid, initial);
-    // refiner.Solve(500000, 40000, &callback);
+    _logger->Log(1, "Refine the points that we dealing with");
+    Mat initial = Mat_<double>::zeros(4,1);
+    auto refiner = RandomSolver(imageSize, grids.get(), initial);
+    refiner.Solve(500000, 40000, &callback);
 
     // _logger->Log(1, "Saving the final points to disk");
     // Mat savePoints = refiner.GetImagePoints();
     // SaveUPoints(_pointFolder, savePoints);
-
-    // _logger->Log(1, "Free Memory");
-    // delete grid;
 }
 
 //--------------------------------------------------

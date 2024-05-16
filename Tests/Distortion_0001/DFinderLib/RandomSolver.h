@@ -26,6 +26,7 @@ namespace NVL_App
 	class RandomSolver
 	{
 	private:
+		Size _imageSize;
 		Distortion * _distortion;
 		GridList * _grids;
 		double _bestScore;
@@ -42,6 +43,6 @@ namespace NVL_App
 	
 	private:
 		double GetNumber(int order);
-		double CalculateScore();
+		double CalculateScore(Mat& dparams);
 	};
 }
