@@ -43,6 +43,6 @@ namespace NVL_App
 	
 	private:
 		double GetNumber(int order);
-		double CalculateScore(Mat& dparams);
+		double CalculateScore(Mat& dparams, Mat& points);
 	};
 }

@@ -23,7 +23,7 @@ RandomSolver::RandomSolver(const Size& imageSize, GridList * grids, Mat& dparams
 {
 	NVLib::RandomUtils::TimeSeedRandomNumbers(); assert(grids->GetCount() > 0);
 	_distortion = new Distortion(imageSize);
-	_bestScore = CalculateScore(dparams);
+	Mat pointMat; _bestScore = CalculateScore(dparams, pointMat);
 }
 
 /**
@@ -64,15 +64,14 @@ double RandomSolver::Solve(int maxIterators, int sensitivity, CallbackBase * cal
 
 		dlink_1[index] += delta;
 
-		auto score = CalculateScore(dparams);
+		Mat pointMat; auto score = CalculateScore(dparams, pointMat);
 	
-		if (score < _bestScore) 
+		if (score <= _bestScore) 
 		{
 			_bestScore = score;
 			
 			if (callback != nullptr) 
 			{
-				Mat pointMat = _grids->GetImagePoints(_imageSize, dparams);
 				callback->Callback(i, score, dparams, pointMat);
 			}
 
@@ -95,23 +94,33 @@ double RandomSolver::Solve(int maxIterators, int sensitivity, CallbackBase * cal
 /**
  * Global logic for calculating the score
  * @param dparams The distortion parameters
+ * @param points The current point matrix
  * @return The overall error
 */
-double RandomSolver::CalculateScore(Mat & dparams) 
+double RandomSolver::CalculateScore(Mat & dparams, Mat& points) 
 {
 	auto totalScore = 0.0;
 
-	cout << dparams.t() << endl;
+	Mat pointMat;
 
 	for (auto grid : _grids->GetData())
 	{
-		auto current = _distortion->Undistort(grid, dparams);
-		Mat H = Homography::GetHomography(current.get());
-		auto score = Homography::GetHScore(H, current.get());
+		auto ugrid = _distortion->Undistort(grid, dparams);
+		Mat H = Homography::GetHomography(ugrid.get());
+		auto hgrid = Homography::GetGrid(grid, H);
+		auto dgrid = _distortion->Distort(hgrid.get(), dparams);
+		auto score = grid->GetDifference(dgrid.get());
 		totalScore += score;
-
-		break;
+		
+		if (pointMat.empty()) pointMat = dgrid->GetImagePointMatrix();
+		else 
+		{
+			Mat update = dgrid->GetImagePointMatrix();
+			vconcat(pointMat, update, pointMat);
+		}
 	}
+
+	points = pointMat;
 
 	return totalScore;
 }

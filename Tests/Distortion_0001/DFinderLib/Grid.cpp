@@ -152,9 +152,12 @@ Mat Grid::GetImagePointMatrix()
 		for (auto column = 0; column < _data.cols; column++) 
 		{
 			auto index = column + row * _data.cols;
+
+			auto x = inputLink[index * 5 + 0];
+			auto y = inputLink[index * 5 + 1];
 			
-			outputLink[index * 2 + 0] = inputLink[index * 5 + 0];
-			outputLink[index * 2 + 1] = inputLink[index * 5 + 1];
+			outputLink[index * 2 + 0] = x;
+			outputLink[index * 2 + 1] = y;
 		}
 	}
 

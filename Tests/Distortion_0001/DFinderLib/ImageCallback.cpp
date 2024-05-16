@@ -43,18 +43,18 @@ void ImageCallback::Callback(int iteration, double aveError, const Mat& paramete
 	auto oLink = (double *) _basePoints.data;
 	auto iLink = (double *) data.data;
 
-	for (auto i = 0; i < pixelCount; i++) 
+	for (auto i = 0; i < data.rows; i++) 
 	{
-		auto u = (int)round(oLink[2 * i + 0]);
-		auto v = (int)round(oLink[2 * i + 1]);
-		circle(display, Point(u,v), 5, Scalar(0,0,255), FILLED);
+		auto x = (int)round(oLink[2 * i + 0]);
+		auto y = (int)round(oLink[2 * i + 1]);
+		circle(display, Point(x,y), 5, Scalar(0,0,255), FILLED);
 
-		u = (int)round(iLink[2 * i + 0]);
-		v = (int)round(iLink[2 * i + 1]);
+		auto u = (int)round(iLink[2 * i + 0]);
+		auto v = (int)round(iLink[2 * i + 1]);
 		circle(display, Point(u,v), 8, Scalar(0,255,0),3);
 	}
 
 	cout << iteration << ". " << parameters.t() << ": " << aveError << endl;
 	
-	imshow("Point", display); waitKey(1);
+	imshow("Point", display); waitKey();
 }

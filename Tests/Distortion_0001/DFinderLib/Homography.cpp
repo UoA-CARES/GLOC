@@ -44,6 +44,38 @@ Mat Homography::GetHomography(Grid * grid)
 //--------------------------------------------------
 
 /**
+ * Get the grid from the given homography
+ * @param grid The base grid
+ * @param H The homograph that we are using
+ * @return The resultant grid
+*/
+unique_ptr<Grid> Homography::GetGrid(Grid * grid, Mat& H) 
+{
+	auto result = new Grid(grid->GetSize());
+
+	for (auto row = 0; row < grid->GetRows(); row++) 
+	{
+		for (auto column = 0; column < grid->GetColumns(); column++) 
+		{
+			auto scenePoint = grid->GetScenePoint(Point(column, row));
+			auto imagePoint = grid->GetImagePoint(Point(column, row)); //Transform(H, Convert(scenePoint));
+
+			auto ipoint_1 = grid->GetImagePoint(Point(column, row));
+			auto ipoint_2 = Transform(H, Convert(scenePoint));
+
+			result->SetScenePoint(Point(column, row), scenePoint);
+			result->SetImagePoint(Point(column, row), ipoint_2);			
+		}
+	}
+
+	return unique_ptr<Grid>(result);
+}
+
+//--------------------------------------------------
+// Scoring
+//--------------------------------------------------
+
+/**
  * @brief Determine the score of the homography fit
  * @param H The homography that we are testing against
  * @param grid The grid that we are processing
@@ -58,7 +90,7 @@ double Homography::GetHScore(Mat& H, Grid * grid)
 		for (auto column = 0; column < grid->GetColumns(); column++) 
 		{
 			auto scenePoint = grid->GetScenePoint(Point(column, row));
-			auto expected = Transform(H, Convert(scenePoint));
+			auto expected = Transform(H, Point2d(scenePoint.x, scenePoint.y));
 			auto actual = grid->GetImagePoint(Point(column, row));
 
 			auto xDiff = expected.x - actual.x;
