@@ -16,8 +16,9 @@ using namespace NVL_App;
 /**
  * @brief Custom Constructor
  * @param basePoints The base point
+ * @param imageSize The size of the images that we are using
  */
-ImageCallback::ImageCallback(const Mat& basePoints) : CallbackBase(), _basePoints(basePoints)
+ImageCallback::ImageCallback(const Mat& basePoints, const Size& imageSize) : CallbackBase(), _basePoints(basePoints), _imageSize(imageSize)
 {
 	// Main Constructor
 }
@@ -35,7 +36,7 @@ ImageCallback::ImageCallback(const Mat& basePoints) : CallbackBase(), _basePoint
  */
 void ImageCallback::Callback(int iteration, double aveError, const Mat& parameters, const Mat& data)
 {
-	Mat display = Mat_<Vec3d>::zeros(1000,1000);
+	Mat display = Mat_<Vec3d>::zeros(_imageSize);
 	auto pixelCount = _basePoints.rows * _basePoints.cols;
 
 	auto points = vector<Point>();
@@ -56,5 +57,5 @@ void ImageCallback::Callback(int iteration, double aveError, const Mat& paramete
 
 	cout << iteration << ". " << parameters.t() << ": " << aveError << endl;
 	
-	imshow("Point", display); waitKey(1);
+	NVLib::DisplayUtils::ShowImage("Point", display, 1000); waitKey(1);
 }

@@ -59,7 +59,7 @@ void Engine::Run()
    
     _logger->Log(1, "Setup a callback object");
     Mat noDistortion = Mat_<double>::zeros(DISTORTION_COEFFICIENTS,1);
-    auto callback = ImageCallback(grids->GetImagePoints(imageSize, noDistortion));
+    auto callback = ImageCallback(grids->GetImagePoints(imageSize, noDistortion), imageSize);
    
     _logger->Log(1, "Refine the points that we dealing with");
     Mat initial = Mat_<double>::zeros(DISTORTION_COEFFICIENTS,1);
