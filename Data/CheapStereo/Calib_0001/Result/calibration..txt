@@ -1,6 +1,0 @@
-3
-Camera_0_Data.txt
-5 5 7 48.000000 48.000000 11 11
-Camera_1_Data.txt
-5 5 7 48.000000 48.000000 9 9
-StereoCamera_01_Data.txt

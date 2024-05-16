@@ -1,2 +1,0 @@
-StereoCamera_0_Intrinsic.txt
-StereoCamera_1_Intrinsic.txt

@@ -19,7 +19,7 @@ using namespace std;
 #include <DFinderLib/ImageCallback.h>
 #include <DFinderLib/RandomSolver.h>
 
-#define DISTORTION_COEFFICIENTS 5
+#define DISTORTION_COEFFICIENTS 14
 
 namespace NVL_App
 {

@@ -65,8 +65,8 @@ double RandomSolver::Solve(int maxIterators, int sensitivity, CallbackBase * cal
 		dlink_1[index] += delta;
 
 		auto decenterMode = NVLib::RandomUtils::GetInteger(0,4);
-		auto deltaX = GetNumber(0);
-		auto deltaY = GetNumber(0);
+		auto deltaX = GetNumber(1);
+		auto deltaY = GetNumber(1);
 
 		auto decenter = Vec2d(_decenter[0], _decenter[1]);
 
@@ -148,6 +148,6 @@ double RandomSolver::CalculateScore(Mat & dparams, Mat& points, const Vec2d& dec
 double RandomSolver::GetNumber(int order) 
 {
 	auto number = NVLib::RandomUtils::GetInteger(-1000, 1000) / 1000.0;
-	auto factor = 0.1; for (auto i = 0; i < order; i++) factor /= 10.0;
+	auto factor = 10; for (auto i = 0; i < order; i++) factor /= 10.0;
 	return number * factor;
 }
