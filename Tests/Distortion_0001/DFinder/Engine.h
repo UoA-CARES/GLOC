@@ -18,6 +18,7 @@ using namespace std;
 #include <DFinderLib/PointLoader.h>
 #include <DFinderLib/ImageCallback.h>
 #include <DFinderLib/RandomSolver.h>
+#include <DFinderLib/SaveUtils.h>
 
 #define DISTORTION_COEFFICIENTS 5
 

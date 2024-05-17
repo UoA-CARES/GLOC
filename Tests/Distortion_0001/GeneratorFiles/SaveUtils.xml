@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+
+<class terminator="true">
+
+<namespace>NVL_App</namespace>
+<solution>DFinderLib</solution>
+<name>SaveUtils</name>
+<description>Save the utils that we are dealing with</description>
+
+<includes>
+    <include name="iostream" namespace="std" local="false" />
+    <include name="NVLib/Path/PathHelper.h" local="false" />
+    <include name="opencv2/opencv.hpp" namespace="cv" local="false" />
+    <include name="RandomSolver.h" local="true" />
+</includes>
+
+<methods>
+
+    <!-- Save Parameters -->
+    <method section="Parameters" modifiers="static" access="public" return="void" name="SaveParams" description="The parameters that we are saving" inline="false">
+        <parameter type="NVLib::PathHelper *" name="helper" description="The path that we are saving to" />
+        <parameter type="RandomSolver *" name="solver" description="The parameter data that was refined" />
+    </method> 
+
+    <!-- Save Points -->
+    <method section="Points" modifiers="static" access="public" return="void" name="SavePoints" description="Save the points that we are dealing with" inline="false">
+        <parameter type="NVLib::PathHelper *" name="helper" description="The path that we are saving to" />
+        <paraemter type="RandomSolver *" name="solver" description="The parameter data was refined" />
+    </method> 
+
+</methods>
+
+</class>

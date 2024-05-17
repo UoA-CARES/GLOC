@@ -66,9 +66,11 @@ void Engine::Run()
     auto refiner = RandomSolver(imageSize, grids.get(), initial);
     refiner.Solve(500000, 40000, &callback);
 
-    // _logger->Log(1, "Saving the final points to disk");
-    // Mat savePoints = refiner.GetImagePoints();
-    // SaveUPoints(_pointFolder, savePoints);
+    _logger->Log(1, "Saving parameter results to disk");
+    SaveUtils::SaveParams(_pathHelper, &refiner);
+
+    _logger->Log(1, "Saving associated points to disk");
+    SaveUtils::SavePoints(_pathHelper, &refiner);
 }
 
 //--------------------------------------------------

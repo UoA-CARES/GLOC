@@ -18,4 +18,5 @@ add_library (DFinderLib STATIC
 	Distortion.cpp
 	RandomSolver.cpp
 	ImageCallback.cpp
+	SaveUtils.cpp
 )

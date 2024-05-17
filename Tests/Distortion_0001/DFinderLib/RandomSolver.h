@@ -38,6 +38,10 @@ namespace NVL_App
 
 		double Solve(int maxIterators, int sensitivity = 100, CallbackBase * callback = nullptr);
 
+		Mat GetCamera();
+		Mat GetPoints(int cameraId);
+		int GetCameraCount();
+
 		inline Distortion * GetDistortion() { return _distortion; }
 		inline double GetBestScore() { return _bestScore; }
 		inline Mat& GetDParams() { return _dparams; }

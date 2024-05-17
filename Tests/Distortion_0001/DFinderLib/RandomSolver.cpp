@@ -97,6 +97,74 @@ double RandomSolver::Solve(int maxIterators, int sensitivity, CallbackBase * cal
 	return _bestScore;
 }
 
+
+//--------------------------------------------------
+// Get Camera Matrix
+//--------------------------------------------------
+
+/**
+ * Get the camera matrix
+ * @return The result that we are saving
+*/
+Mat RandomSolver::GetCamera() 
+{
+	Mat camera = _distortion->GetCamera().clone();
+	auto c_link = (double *) camera.data;
+	c_link[2] += _decenter[0]; c_link[5] += _decenter[1];
+	return camera;
+}
+
+//--------------------------------------------------
+// Get the points
+//--------------------------------------------------
+
+/**
+ * The points that we are dealing with
+ * @param cameraId The camera identifier that we are dealing with
+ * @return The points that we are dealing with
+*/
+Mat RandomSolver::GetPoints(int cameraId) 
+{
+	if (cameraId < 0 || cameraId > _grids->GetCount()) throw runtime_error("CameraId is out of range");
+	
+	auto grid = _grids->GetData()[cameraId];
+	auto ugrid = _distortion->Undistort(grid, _dparams, _decenter);
+	Mat H = Homography::GetHomography(ugrid.get());
+	auto hgrid = Homography::GetGrid(grid, H);
+
+	auto pointCount = hgrid->GetData().rows * hgrid->GetData().cols;
+	auto d_link = (double *) hgrid->GetData().data;
+
+	Mat result = Mat_<double>::zeros(pointCount, 5);
+	auto m_link = (double *) result.data;
+
+	for (auto row = 0; row < pointCount; row++) 
+	{
+		auto u = d_link[row * 5 + 0];
+		auto v = d_link[row * 5 + 1];
+		auto X = d_link[row * 5 + 2];
+		auto Y = d_link[row * 5 + 3];
+		auto Z = d_link[row * 5 + 4];
+
+		m_link[row * 5 + 0] = X;
+		m_link[row * 5 + 1] = Y;
+		m_link[row * 5 + 2] = Z;
+		m_link[row * 5 + 3] = u;
+		m_link[row * 5 + 4] = v;
+	}
+
+	return result;
+}
+
+/**
+ * Retrieve the number of cameras that we are dealing with
+ * @return The number of cameras
+*/
+int RandomSolver::GetCameraCount() 
+{
+	return _grids->GetCount();
+}
+
 //--------------------------------------------------
 // Helper: Calculate scores
 //--------------------------------------------------

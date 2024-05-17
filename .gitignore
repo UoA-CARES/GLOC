@@ -13,6 +13,7 @@ Utils/PointConvert/build/
 Data/**/*.png
 Data/**/*.jpg
 Data/**/*.txt
+Data/**/*.zip
 
 # Tests
 Tests/Distortion_0000/build/
