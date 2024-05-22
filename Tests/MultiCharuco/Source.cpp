@@ -10,6 +10,7 @@
 using namespace std;
 
 #include <NVLib/Logger.h>
+#include <NVLib/DisplayUtils.h>
 #include <NVLib/Path/PathHelper.h>
 #include <NVLib/Parameters/Parameters.h>
 
@@ -22,6 +23,7 @@ using namespace cv;
 // Function Prototypes
 //--------------------------------------------------
 void Run(NVLib::Parameters * parameters);
+Mat GetImage(NVLib::PathHelper& helper);
 
 //--------------------------------------------------
 // Execution Logic
@@ -37,12 +39,33 @@ void Run(NVLib::Parameters * parameters)
 
     logger.StartApplication();
 
-    // Create a helper for path tracking
+    logger.Log(1, " Create an image loader");
     auto database = NVL_Utils::ArgReader::ReadString(parameters, "database");
     auto dataset = NVL_Utils::ArgReader::ReadString(parameters, "dataset");
     auto pathHelper = NVLib::PathHelper(database, dataset);
 
+    logger.Log(1, "Load a calibration image");
+    auto image = (Mat) GetImage(pathHelper);
+
+    NVLib::DisplayUtils::ShowImage("Image", image, 1000); waitKey(); 
+
     logger.StopApplication();
+}
+
+//--------------------------------------------------
+// Get Image
+//--------------------------------------------------
+
+/**
+ * Retrieve the image
+ * @param helper The image that we are dealing with
+ * @return The image that was found
+*/
+Mat GetImage(NVLib::PathHelper& helper) 
+{
+    auto path = helper.GetPath("Images", "left.png");
+    auto image = (Mat) imread(path); if (image.empty()) throw runtime_error("Unable to open: " + path);
+    return image;
 }
 
 //--------------------------------------------------
