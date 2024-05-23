@@ -54,7 +54,7 @@ void Engine::Run()
     auto grids = PointLoader::GetGridList(_pathHelper, gridCount);
 
     _logger->Log(1, "Determining the image size");
-    auto imageSize = PointLoader::GetImageSize(_pathHelper, "Images", "left.png");
+    auto imageSize = PointLoader::GetImageSize(_pathHelper, "Images", "image.png");
     _logger->Log(1, "Image Size: %i x %i", imageSize.width, imageSize.height);
    
     _logger->Log(1, "Setup a callback object");

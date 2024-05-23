@@ -87,6 +87,10 @@ void Run(NVLib::Parameters * parameters)
     cornerSubPix(grayImage, cc_1, Size(13, 13), Size(-1, -1), TermCriteria(TermCriteria::COUNT & TermCriteria::EPS, 1000, 1e-3));
     cornerSubPix(grayImage, cc_2, Size(13, 13), Size(-1, -1), TermCriteria(TermCriteria::COUNT & TermCriteria::EPS, 1000, 1e-3));
 
+    logger.Log(1, "Verification that all corners were detected");
+    if (cc_1.size() != charucoBoard_1->chessboardCorners.size()) throw runtime_error("Unable to detect all corners off the first charuco grid");
+    if (cc_2.size() != charucoBoard_2->chessboardCorners.size()) throw runtime_error("Unabel to detect all corners off the second charuco grid");
+
     logger.Log(1, "Save image of detected markers");
     auto displayImage = (Mat) image.clone(); 
     cv::aruco::drawDetectedCornersCharuco(displayImage, cc_1, ci_1, Scalar(0, 0, 255)); cv::aruco::drawDetectedCornersCharuco(displayImage, cc_2, ci_2, Scalar(0,0,255));
@@ -134,7 +138,7 @@ unique_ptr<NVL_App::BoardPoints> FilterPoints(vector<int>& indices, vector<vecto
 */
 Mat GetImage(NVLib::PathHelper& helper) 
 {
-    auto path = helper.GetPath("Images", "left.png");
+    auto path = helper.GetPath("Images", "image.png");
     auto image = (Mat) imread(path); if (image.empty()) throw runtime_error("Unable to open: " + path);
     return image;
 }
@@ -209,7 +213,7 @@ void LoadDetectorParameters(NVLib::PathHelper& helper, Ptr<aruco::DetectorParame
 void SavePoints(NVLib::PathHelper& helper, int boardNumber, const Ptr<aruco::CharucoBoard>& board, const vector<int>& indices, const vector<Point2f>& corners) 
 {
     // Create a path
-    auto fileName = stringstream(); fileName << "cpoints_" << setw(4) << setfill('0') << boardNumber << ".txt";
+    auto fileName = stringstream(); fileName << "points_" << setw(4) << setfill('0') << boardNumber << ".txt";
     auto savePath = helper.GetPath("Points", fileName.str());
 
     ////////////////
@@ -218,12 +222,12 @@ void SavePoints(NVLib::PathHelper& helper, int boardNumber, const Ptr<aruco::Cha
     ////////////////
 
     // Build 3D points
-    auto scenePoints = vector<Point3f>();
+    auto scenePoints = vector<Point3f>(); auto squareLength = board->getSquareLength();
     for (auto i = 0; i < indices.size(); i++) 
     {
         auto& index = indices[i];
         auto& point = board->chessboardCorners[index];
-        scenePoints.push_back(point);
+        scenePoints.push_back(Point3f(point.x - squareLength, point.y - squareLength, 0));
     }
     
     // Open a write
