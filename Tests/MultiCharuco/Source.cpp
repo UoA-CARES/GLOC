@@ -31,6 +31,7 @@ Mat GetImage(NVLib::PathHelper& helper);
 unique_ptr<NVL_App::BoardParams> LoadBoardParams(NVLib::PathHelper& helper);
 void LoadDetectorParameters(NVLib::PathHelper& helper, Ptr<aruco::DetectorParameters> &params);
 unique_ptr<NVL_App::BoardPoints> FilterPoints(vector<int>& indices, vector<vector<Point2f>>& corners, const Range& indexRange);
+void SavePoints(NVLib::PathHelper& helper, int boardNumber, const Ptr<aruco::CharucoBoard>& board, const vector<int>& indices, const vector<Point2f>& corners);
 
 //--------------------------------------------------
 // Execution Logic
@@ -74,8 +75,7 @@ void Run(NVLib::Parameters * parameters)
     logger.Log(1, "Create Charuco board containers");
     auto charucoBoard_1  = aruco::CharucoBoard::create(boardParams->GetBoardSize().width, boardParams->GetBoardSize().height, boardParams->GetBlockSize(), boardParams->GetMarkerSize(), dictionary);
     auto charucoBoard_2  = aruco::CharucoBoard::create(boardParams->GetBoardSize().width, boardParams->GetBoardSize().height, boardParams->GetBlockSize(), boardParams->GetMarkerSize(), dictionary);
-    auto indices_1 = vector<int>(); for (auto i = 0; i < 24; i++) indices_1.push_back(i);
-    auto indices_2 = vector<int>(); for (auto i = 24; i < 48; i++) indices_2.push_back(i);
+    auto indices_1 = vector<int>(); for (auto i = 0; i < 24; i++) indices_1.push_back(i); auto indices_2 = vector<int>(); for (auto i = 24; i < 48; i++) indices_2.push_back(i);
         
     charucoBoard_1->setIds(indices_1);  
     charucoBoard_2->setIds(indices_2);
@@ -87,12 +87,15 @@ void Run(NVLib::Parameters * parameters)
     cornerSubPix(grayImage, cc_1, Size(13, 13), Size(-1, -1), TermCriteria(TermCriteria::COUNT & TermCriteria::EPS, 1000, 1e-3));
     cornerSubPix(grayImage, cc_2, Size(13, 13), Size(-1, -1), TermCriteria(TermCriteria::COUNT & TermCriteria::EPS, 1000, 1e-3));
 
-    logger.Log(1, "Show the detected markers");
+    logger.Log(1, "Save image of detected markers");
     auto displayImage = (Mat) image.clone(); 
     cv::aruco::drawDetectedCornersCharuco(displayImage, cc_1, ci_1, Scalar(0, 0, 255)); cv::aruco::drawDetectedCornersCharuco(displayImage, cc_2, ci_2, Scalar(0,0,255));
-    NVLib::DisplayUtils::ShowImage("Marker Image", displayImage, 1500);
-    waitKey();
+    auto imagePath = pathHelper.GetPath("Points", "marker.png"); imwrite(imagePath, displayImage);
 
+    logger.Log(1, "Save points to disk");
+    SavePoints(pathHelper, 0, charucoBoard_1, ci_1, cc_1);
+    SavePoints(pathHelper, 1, charucoBoard_2, ci_2, cc_2);
+    
     logger.StopApplication();
 }
 
@@ -131,7 +134,7 @@ unique_ptr<NVL_App::BoardPoints> FilterPoints(vector<int>& indices, vector<vecto
 */
 Mat GetImage(NVLib::PathHelper& helper) 
 {
-    auto path = helper.GetPath("Images", "right.png");
+    auto path = helper.GetPath("Images", "left.png");
     auto image = (Mat) imread(path); if (image.empty()) throw runtime_error("Unable to open: " + path);
     return image;
 }
@@ -189,6 +192,54 @@ void LoadDetectorParameters(NVLib::PathHelper& helper, Ptr<aruco::DetectorParame
     reader["errorCorrectionRate"] >> params->errorCorrectionRate;
 
     reader.release();
+}
+
+//--------------------------------------------------
+// Save Points
+//--------------------------------------------------
+
+/**
+ * Save points to disk
+ * @param helper The helper tool that we are using to save points to disk
+ * @param boardNumber The number of the board that we are saving
+ * @param board The actual board details
+ * @param indices The indices of the points
+ * @param corners The actual corners that we are saving
+*/
+void SavePoints(NVLib::PathHelper& helper, int boardNumber, const Ptr<aruco::CharucoBoard>& board, const vector<int>& indices, const vector<Point2f>& corners) 
+{
+    // Create a path
+    auto fileName = stringstream(); fileName << "cpoints_" << setw(4) << setfill('0') << boardNumber << ".txt";
+    auto savePath = helper.GetPath("Points", fileName.str());
+
+    ////////////////
+    // NOTE that there is some implication to suggest that the indices = the corner id - see https://github.com/opencv/opencv_contrib/blob/4.x/modules/aruco/src/aruco_calib.cpp
+    // This needs to be tested ofcourse!
+    ////////////////
+
+    // Build 3D points
+    auto scenePoints = vector<Point3f>();
+    for (auto i = 0; i < indices.size(); i++) 
+    {
+        auto& index = indices[i];
+        auto& point = board->chessboardCorners[index];
+        scenePoints.push_back(point);
+    }
+    
+    // Open a write
+    auto writer = ofstream(savePath); if (!writer.is_open()) throw runtime_error("Unable to create output file: " + savePath);
+
+    for (auto i = 0; i < indices.size(); i++) 
+    {
+        auto index = indices[i];
+        auto imagePoint = corners[i];
+        auto scenePoint = scenePoints[i];
+     
+        writer << scenePoint.x << "," << scenePoint.y << "," << scenePoint.z << "," << imagePoint.x << "," << imagePoint.y << endl;
+    }
+
+    // Close writer
+    writer.close();
 }
 
 //--------------------------------------------------
