@@ -57,8 +57,7 @@ void Run(NVLib::Parameters * parameters)
     logger.Log(1, "Load up board parameters");
     auto boardParams = LoadBoardParams(pathHelper);
     auto dictionary = aruco::getPredefinedDictionary(boardParams->GetDictionary());
-    auto board = aruco::CharucoBoard::create(boardParams->GetBoardSize().width, boardParams->GetBoardSize().height, boardParams->GetBlockSize(), boardParams->GetMarkerSize(), dictionary);
-
+   
     logger.Log(1, "Loading the detector parameters");
     auto detectParameters = aruco::DetectorParameters::create();
     LoadDetectorParameters(pathHelper, detectParameters);
@@ -70,14 +69,29 @@ void Run(NVLib::Parameters * parameters)
 
     logger.Log(1, "Seperating out the board detections");
     auto board_1 = FilterPoints(indices, corners, Range(0, 23));
-    auto board_2 = FilterPoints(indices, corners, Range(24, 47));
+    auto board_2 = FilterPoints(indices, corners, Range(24, 50));
 
-    
+    logger.Log(1, "Create Charuco board containers");
+    auto charucoBoard_1  = aruco::CharucoBoard::create(boardParams->GetBoardSize().width, boardParams->GetBoardSize().height, boardParams->GetBlockSize(), boardParams->GetMarkerSize(), dictionary);
+    auto charucoBoard_2  = aruco::CharucoBoard::create(boardParams->GetBoardSize().width, boardParams->GetBoardSize().height, boardParams->GetBlockSize(), boardParams->GetMarkerSize(), dictionary);
+    auto indices_1 = vector<int>(); for (auto i = 0; i < 24; i++) indices_1.push_back(i);
+    auto indices_2 = vector<int>(); for (auto i = 24; i < 48; i++) indices_2.push_back(i);
+        
+    charucoBoard_1->setIds(indices_1);  
+    charucoBoard_2->setIds(indices_2);
 
-    // logger.Log(1, "Show the detected markers");
-    // auto displayImage = (Mat) image.clone(); cv::aruco::drawDetectedMarkers(displayImage, corners, indices);
-    // NVLib::DisplayUtils::ShowImage("Marker Image", displayImage, 1500);
-    // waitKey();
+    logger.Log(1, "Extract Charuco corners");
+    vector<Point2f> cc_1; vector<int> ci_1; cv::aruco::interpolateCornersCharuco(board_1->GetCorners(), board_1->GetIndices(), image, charucoBoard_1, cc_1, ci_1);
+    vector<Point2f> cc_2; vector<int> ci_2; cv::aruco::interpolateCornersCharuco(board_2->GetCorners(), board_2->GetIndices(), image, charucoBoard_2, cc_2, ci_2);
+    auto grayImage = (Mat) Mat(); cvtColor(image, grayImage, COLOR_BGR2GRAY);
+    cornerSubPix(grayImage, cc_1, Size(13, 13), Size(-1, -1), TermCriteria(TermCriteria::COUNT & TermCriteria::EPS, 1000, 1e-3));
+    cornerSubPix(grayImage, cc_2, Size(13, 13), Size(-1, -1), TermCriteria(TermCriteria::COUNT & TermCriteria::EPS, 1000, 1e-3));
+
+    logger.Log(1, "Show the detected markers");
+    auto displayImage = (Mat) image.clone(); 
+    cv::aruco::drawDetectedCornersCharuco(displayImage, cc_1, ci_1, Scalar(0, 0, 255)); cv::aruco::drawDetectedCornersCharuco(displayImage, cc_2, ci_2, Scalar(0,0,255));
+    NVLib::DisplayUtils::ShowImage("Marker Image", displayImage, 1500);
+    waitKey();
 
     logger.StopApplication();
 }
@@ -117,7 +131,7 @@ unique_ptr<NVL_App::BoardPoints> FilterPoints(vector<int>& indices, vector<vecto
 */
 Mat GetImage(NVLib::PathHelper& helper) 
 {
-    auto path = helper.GetPath("Images", "left.png");
+    auto path = helper.GetPath("Images", "right.png");
     auto image = (Mat) imread(path); if (image.empty()) throw runtime_error("Unable to open: " + path);
     return image;
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <opencv_storage>
-    <board_size>8 6</board_size>
+    <board_size>6 8</board_size>
     <block_size>48</block_size>
     <marker_size>36</marker_size>
     <dictionary>3</dictionary>
