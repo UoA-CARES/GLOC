@@ -19,3 +19,4 @@ Data/**/*.zip
 Tests/Distortion_0000/build/
 Tests/Distortion_0001/build/
 Tests/MultiCharuco/build/
+Tests/Calibrator/build/
