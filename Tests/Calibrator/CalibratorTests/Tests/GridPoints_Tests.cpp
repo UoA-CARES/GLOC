@@ -20,13 +20,26 @@ using namespace NVL_App;
  */
 TEST(GridPoints_Test, counts_test)
 {
-	FAIL() << "Not implemented";
+	// Base Count Test
+	auto grid = GridPoints(Size(5,4));
+	ASSERT_EQ(grid.GetPointCount(), 20);
+	ASSERT_EQ(grid.GetSetPointCount(), 0);
+	ASSERT_EQ(grid.GetImagePoints().size(), 20);
 
-	// Setup
+	// Add a 2D point
+	grid.Update(Point(1,1), Point2d(10,10), Point2d(11, 12));
+	ASSERT_EQ(grid.GetSetPointCount(), 1);
+	auto p_1 = grid.GetGoalPoint3D(Point(1,1));
+	ASSERT_EQ(p_1.x, 11); ASSERT_EQ(p_1.y, 12); ASSERT_EQ(p_1.z, 0);
 
-	// Execute
+	// Add a 3D point
+	grid.Update(Point(1,2), Point2d(10,20), Point3d(15, 16, 100));
+	ASSERT_EQ(grid.GetSetPointCount(), 2);
+	auto p_2 = grid.GetGoalPoint3D(Point(1,2));
+	ASSERT_EQ(p_1.x, 10); ASSERT_EQ(p_1.y, 20); ASSERT_EQ(p_1.z, 100);
 
-	// Confirm
-
-	// Teardown
+	// Set Point Test
+	ASSERT_TRUE(grid.IsPointSet(Point(1,1)));
+	ASSERT_TRUE(grid.IsPointSet(Point(1,2)));
+	ASSERT_FALSE(grid.IsPointSet(Point(1,3)));
 }

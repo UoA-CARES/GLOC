@@ -25,7 +25,7 @@ namespace NVL_App
 		vector<bool> _setPoints;
 		vector<double> _depth;
 	public:
-		GridPoints(Size& gridSize);
+		GridPoints(const Size& gridSize);
 
 		void Update(const Point2i& position, const Point2d& imagePoint, const Point2d& goalPoint);
 		void Update(const Point2i& position, const Point2d& imagePoint, const Point3d& goalPoint);
@@ -42,5 +42,5 @@ namespace NVL_App
 		inline Size& GetGridSize() { return _gridSize; }
 		inline vector<bool>& GetSetPoints() { return _setPoints; }
 		inline vector<double>& GetDepth() { return _depth; }
-};
+	};
 }

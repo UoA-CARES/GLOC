@@ -17,7 +17,7 @@ using namespace NVL_App;
  * @brief Custom Constructor
  * @param gridSize the size of the grid of points
  */
-GridPoints::GridPoints(Size& gridSize)
+GridPoints::GridPoints(const Size& gridSize)
 {
 	throw runtime_error("Not implemented");
 }
