@@ -1,0 +1,80 @@
+<?xml version="1.0" ?>
+
+<class>
+
+<namespace>NVL_App</namespace>
+<solution>CalibratorLib</solution>
+<name>GridPoints</name>
+<description>The points that make up a general grid structure</description>
+
+<includes>
+    <include name="iostream" namespace="std" local="false" />
+    <include name="opencv2/opencv.hpp" namespace="cv" local="true" />
+</includes>
+
+<variables>
+    <variable type="vector<Point2d>" name="imagePoints" code="10" />
+    <variable type="vector<Point2d>" name="goalPoints" code="10" />
+    <variable type="Size" name="gridSize" code="10" />
+    <variable type="vector<bool>" name="setPoints" code="10" />
+    <variable type="vector<double>" name="depth" code="10" />
+</variables>
+
+<constructors>
+
+    <!-- Empty pointset constructor -->
+    <constructor type="custom" inline="false">
+        <parameter type="Size&" name="gridSize" description="the size of the grid of points" />
+    </constructor>
+
+</constructors>
+
+<methods>
+
+    <!-- Update points -->
+    <method section="Update" access="public" return="void" name="Update" description="Update a point within the system" inline="false">
+        <parameter type="const Point2i&" name="position" description="The position of the update" />
+        <parameter type="const Point2d&" name="imagePoint" description="The location of the image point" />
+        <parameter type="const Point2d&" name="goalPoint" description="The position of the goal point" />
+    </method> 
+
+    <!-- Update points -->
+    <method section="Update" access="public" return="void" name="Update" description="Update a point within the system" inline="false">
+        <parameter type="const Point2i&" name="position" description="The position of the update" />
+        <parameter type="const Point2d&" name="imagePoint" description="The location of the image point" />
+        <parameter type="const Point3d&" name="goalPoint" description="The position of the goal point" />
+    </method>
+
+    <!-- Get image point -->
+    <method section="Getter" access="public" return="Point2d" name="GetImagePoint" description="Retrieve a given image point" inline="false">
+        <parameter type="const Point2i&" name="position" description="the position of the associated image point" />
+    </method> 
+
+    <!-- Get goal point 2D -->
+    <method section="Getter" access="public" return="Point2d" name="GetGoalPoint2D" description="Retrieve a given image point (in 2D)" inline="false">
+        <parameter type="const Point2i&" name="position" description="the position of the associated image point" />
+    </method> 
+
+    <!-- Get goal point 3D -->
+    <method section="Getter" access="public" return="Point3d" name="GetGoalPoint3D" description="Retrieve a given goal point (in 3D)" inline="false">
+        <parameter type="const Point2i&" name="position" description="the position of the associated image point" />
+    </method> 
+
+    <!-- Is position set -->
+     <method section="Getter" access="public" return="bool" name="IsPointSet" description="Determines whether a given point is set" inline="false">
+        <parameter type="const Point2i&" name="position" description="the position of the associated image point" />
+    </method> 
+
+    <!-- Get point count -->
+    <method section="Getter" access="public" return="int" name="GetPointCount" description="Retrieve the number of points within the grid" inline="false" />
+
+    <!-- Get "set" point count -->
+    <method section="Getter" access="public" return="int" name="GetSetPointCount" description="Retrieve the number of points that have been set" inline="false" />
+
+</methods>
+
+<tests>
+    <test name="counts_test" description="Determine that the counts associated with the grid are correct" exception="false" />
+</tests> 
+
+</class>
