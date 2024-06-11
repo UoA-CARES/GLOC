@@ -36,7 +36,9 @@ TEST(GridPoints_Test, counts_test)
 	grid.Update(Point(1,2), Point2d(10,20), Point3d(15, 16, 100));
 	ASSERT_EQ(grid.GetSetPointCount(), 2);
 	auto p_2 = grid.GetGoalPoint3D(Point(1,2));
-	ASSERT_EQ(p_1.x, 10); ASSERT_EQ(p_1.y, 20); ASSERT_EQ(p_1.z, 100);
+	ASSERT_EQ(p_2.x, 15); ASSERT_EQ(p_2.y, 16); ASSERT_EQ(p_2.z, 100);
+	auto p_3 = grid.GetImagePoint(Point(1,2));
+	ASSERT_EQ(p_3.x, 10); ASSERT_EQ(p_3.y, 20);
 
 	// Set Point Test
 	ASSERT_TRUE(grid.IsPointSet(Point(1,1)));

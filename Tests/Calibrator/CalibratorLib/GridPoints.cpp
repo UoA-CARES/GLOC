@@ -17,9 +17,17 @@ using namespace NVL_App;
  * @brief Custom Constructor
  * @param gridSize the size of the grid of points
  */
-GridPoints::GridPoints(const Size& gridSize)
+GridPoints::GridPoints(const Size& gridSize) : _gridSize(gridSize)
 {
-	throw runtime_error("Not implemented");
+	assert(gridSize.width > 0 && gridSize.height > 0);
+	auto pointCount = gridSize.width * gridSize.height;
+	for (auto i = 0; i < pointCount; i++) 
+	{
+		_imagePoints.push_back(Point2d());
+		_goalPoints.push_back(Point2d());
+		_setPoints.push_back(false);
+		_depth.push_back(0);
+	}
 }
 
 //--------------------------------------------------
@@ -34,7 +42,13 @@ GridPoints::GridPoints(const Size& gridSize)
  */
 void GridPoints::Update(const Point2i& position, const Point2d& imagePoint, const Point2d& goalPoint)
 {
-	throw runtime_error("Not implemented");
+	assert(position.x >= 0 && position.x < _gridSize.width && position.y >= 0 && position.y < _gridSize.height);
+	auto index = position.x + position.y * _gridSize.width;
+
+	_imagePoints[index] = imagePoint;
+	_goalPoints[index] = goalPoint;
+	_depth[index] = 0;
+	_setPoints[index] = true;
 }
 
 /**
@@ -45,7 +59,13 @@ void GridPoints::Update(const Point2i& position, const Point2d& imagePoint, cons
  */
 void GridPoints::Update(const Point2i& position, const Point2d& imagePoint, const Point3d& goalPoint)
 {
-	throw runtime_error("Not implemented");
+	assert(position.x >= 0 && position.x < _gridSize.width && position.y >= 0 && position.y < _gridSize.height);
+	auto index = position.x + position.y * _gridSize.width;
+
+	_imagePoints[index] = imagePoint;
+	_goalPoints[index] = Point2d(goalPoint.x, goalPoint.y);
+	_depth[index] = goalPoint.z;
+	_setPoints[index] = true;
 }
 
 //--------------------------------------------------
@@ -59,7 +79,9 @@ void GridPoints::Update(const Point2i& position, const Point2d& imagePoint, cons
  */
 Point2d GridPoints::GetImagePoint(const Point2i& position)
 {
-	throw runtime_error("Not implemented");
+	assert(position.x >= 0 && position.x < _gridSize.width && position.y >= 0 && position.y < _gridSize.height);
+	auto index = position.x + position.y * _gridSize.width;
+	return _imagePoints[index];
 }
 
 /**
@@ -69,7 +91,9 @@ Point2d GridPoints::GetImagePoint(const Point2i& position)
  */
 Point2d GridPoints::GetGoalPoint2D(const Point2i& position)
 {
-	throw runtime_error("Not implemented");
+	assert(position.x >= 0 && position.x < _gridSize.width && position.y >= 0 && position.y < _gridSize.height);
+	auto index = position.x + position.y * _gridSize.width;
+	return _goalPoints[index];
 }
 
 /**
@@ -79,7 +103,10 @@ Point2d GridPoints::GetGoalPoint2D(const Point2i& position)
  */
 Point3d GridPoints::GetGoalPoint3D(const Point2i& position)
 {
-	throw runtime_error("Not implemented");
+	assert(position.x >= 0 && position.x < _gridSize.width && position.y >= 0 && position.y < _gridSize.height);
+	auto index = position.x + position.y * _gridSize.width;
+	auto xy =  _goalPoints[index]; auto z = _depth[index];
+	return Point3d(xy.x, xy.y, z); 
 }
 
 /**
@@ -89,7 +116,9 @@ Point3d GridPoints::GetGoalPoint3D(const Point2i& position)
  */
 bool GridPoints::IsPointSet(const Point2i& position)
 {
-	throw runtime_error("Not implemented");
+	assert(position.x >= 0 && position.x < _gridSize.width && position.y >= 0 && position.y < _gridSize.height);
+	auto index = position.x + position.y * _gridSize.width;
+	return _setPoints[index];
 }
 
 /**
@@ -98,7 +127,7 @@ bool GridPoints::IsPointSet(const Point2i& position)
  */
 int GridPoints::GetPointCount()
 {
-	throw runtime_error("Not implemented");
+	return _gridSize.width * _gridSize.height;
 }
 
 /**
@@ -107,5 +136,7 @@ int GridPoints::GetPointCount()
  */
 int GridPoints::GetSetPointCount()
 {
-	throw runtime_error("Not implemented");
+	auto total = 0; auto pixelCount = _gridSize.width * _gridSize.height;
+	for (auto i = 0; i < pixelCount; i++) if (_setPoints[i]) total++;
+	return total;
 }
