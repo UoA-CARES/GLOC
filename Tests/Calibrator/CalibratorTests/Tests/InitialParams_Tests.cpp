@@ -20,13 +20,26 @@ using namespace NVL_App;
  */
 TEST(InitialParams_Test, file_initialize)
 {
-	FAIL() << "Not implemented";
+	// Setup: Setup test data
+	auto camera = (Mat) (Mat_<double>(3,3) << 1500, 0, 640, 0, 1499, 480, 0, 0, 1);
+	auto distortion = (Mat) (Mat_<double>(4,1) << 0.1, -0.2, 0.3, -0.5 );
+	auto size = Size(1280, 960);
 
-	// Setup
+	// Write this data to file
+	auto writer = FileStorage("params.xml", FileStorage::FORMAT_XML | FileStorage::WRITE);
+	writer << "camera" << camera << "distortion" << distortion << "size" << size;
+	writer.release();
 
 	// Execute
+	auto params = InitialParams("params.xml");
 
 	// Confirm
+	auto expected = (double *) camera.data; auto actual = (double *) params.GetCamera().data; 
+	for (auto i = 0; i < 9; i++) ASSERT_EQ(expected[i], actual[i]);
 
-	// Teardown
+	expected = (double *) distortion.data; actual = (double *) params.GetDistortion().data; 
+	for (auto i = 0; i < 4; i++) ASSERT_EQ(expected[i], actual[i]);
+
+	ASSERT_EQ(size.width, params.GetImageSize().width);
+	ASSERT_EQ(size.height, params.GetImageSize().height);
 }

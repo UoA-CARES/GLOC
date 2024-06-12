@@ -32,5 +32,7 @@ InitialParams::InitialParams(Mat& camera, Mat& distortion, Size& imageSize)
  */
 InitialParams::InitialParams(const string& path)
 {
-	throw runtime_error("Not implemented");
+	auto reader = FileStorage(path, FileStorage::FORMAT_XML | FileStorage::READ);
+	reader["camera"] >> _camera; reader["distortion"] >> _distortion; reader["size"] >> _imageSize;
+	reader.release();
 }
