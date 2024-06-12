@@ -13,4 +13,5 @@ include_directories("../" "${LIBRARY_BASE}/NVLib")
 add_library (CalibratorLib STATIC
 	ArgUtils.cpp
 	GridPoints.cpp
+	InitialParams.cpp
 )
