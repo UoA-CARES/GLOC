@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+
+<class>
+
+<namespace>NVL_App</namespace>
+<solution>CalibratorLib</solution>
+<name>RefineResult</name>
+<description>The base class for holding refined results for the application</description>
+
+<includes>
+    <include name="iostream" namespace="std" local="false" />
+    <include name="GridPoints.h" local="true" />
+</includes>
+
+<variables>
+    <variable type="double" name="lastError" code="11" />
+    <variable type="int" name="iterators" code="10" />
+</variables>
+
+<constructors>
+
+    <!-- Main Constructor-->
+    <constructor type="empty" inline="true" />
+
+</constructors>
+
+<methods>
+
+    <!-- Calculate the current error -->
+    <method section="Error" modifiers="virtual" access="public" return="double" name="CalculateError" description="Calculate the current error" inline="true">
+        <parameter type="GridPoints *" name="points" description="The grid points that we are processing" />
+        <parameter type="vector<double>&" name="errors" description="The set of errors that we are adding" />
+    </method>   
+
+    <!-- Set the State -->
+    <method section="State" modifiers="virtual" access="public" return="void" name="SetError" description="Set the current error getter" inline="true">
+        <parameter type="vector<double>&" name="variables" description="The variables with we are adding" />
+    </method>    
+
+</methods>
+
+</class>
