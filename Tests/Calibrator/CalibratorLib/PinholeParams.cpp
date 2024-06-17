@@ -18,9 +18,9 @@ using namespace NVL_App;
  * @param camera The camera matrix that we are using
  * @param pose The pose matrix that we are storing
  */
-PinholeParams::PinholeParams(Mat camera, Mat pose)
+PinholeParams::PinholeParams(Mat camera, Mat pose) : _camera(camera)
 {
-	throw runtime_error("Not implemented");
+	NVLib::PoseUtils::Pose2Vectors(pose, _rvec, _tvec);
 }
 
 //--------------------------------------------------
@@ -34,8 +34,30 @@ PinholeParams::PinholeParams(Mat camera, Mat pose)
  * @return double Returns a double
  */
 double PinholeParams::CalculateError(GridPoints * points, vector<double>& errors)
-{
-	throw runtime_error("Not implemented");
+{	
+	auto result = 0.0; errors.clear();
+
+	auto grid = points->GetGridSize();
+
+	for (auto row = 0; row < grid.height; row++) 
+	{
+		for (auto column = 0; column < grid.width; column++) 
+		{
+			auto position = Point2i(column, row);
+			auto isSet = points->IsPointSet(position); if (!isSet) continue;
+			auto scenePoint = points->GetGoalPoint3D(position);
+			auto imagePoint = points->GetImagePoint(position);
+
+			auto pose = GetPoseMatrix();
+			auto tscenePoint = NVLib::Math3D::TransformPoint(pose, scenePoint);
+
+			auto expected = NVLib::Math3D::Project(_camera, tscenePoint);
+			auto error = NVLib::Math2D::GetDistance(imagePoint, expected);
+			result += error; errors.push_back(error);
+		}
+	}
+
+	return result;
 }
 
 //--------------------------------------------------
@@ -48,7 +70,10 @@ double PinholeParams::CalculateError(GridPoints * points, vector<double>& errors
  */
 void PinholeParams::SetState(vector<double>& variables)
 {
-	throw runtime_error("Not implemented");
+	auto clink = (double *) _camera.data;
+	clink[0] = variables[0]; clink[4] = variables[1];
+	_rvec = Vec3d(variables[2], variables[3], variables[4]);
+	_tvec = Vec3d(variables[5], variables[6], variables[7]);
 }
 
 //--------------------------------------------------
@@ -59,7 +84,7 @@ void PinholeParams::SetState(vector<double>& variables)
  * @brief Retrieve the pose as a matrix
  * @return Mat Returns a Mat
  */
-Mat PinholeParams::GetPoseMatrix( )
+Mat PinholeParams::GetPoseMatrix()
 {
-	throw runtime_error("Not implemented");
+	return NVLib::PoseUtils::Vectors2Pose(_rvec, _tvec);
 }

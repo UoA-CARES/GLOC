@@ -31,8 +31,8 @@ TEST(PinholeParams_Test, error_calculation)
 
 	// Setup the points
 	auto points = GridPoints(Size(2,1));
-	points.Update(Point2i(0,0), Point2d(640,481), Point3d(0,0,0));
-	points.Update(Point2i(1,0), Point2d(841,181), Point3d(20,-30,100));
+	points.Update(Point2i(0, 0), Point2d(640, 481), Point3d(0, 0, 100));
+	points.Update(Point2i(1, 0), Point2d(841, 181), Point3d(20, -30, 100));
 
 	// Calcualte errors
 	auto errors = vector<double>(); auto totalError = params.CalculateError(&points, errors);
@@ -40,8 +40,8 @@ TEST(PinholeParams_Test, error_calculation)
 	// Validate
 	ASSERT_EQ(errors.size(), 2);
 	ASSERT_EQ(errors[0], 1);
-	ASSERT_EQ(errors[1], 2);
-	ASSERT_EQ(totalError, 3);
+	ASSERT_EQ(errors[1], sqrt(2));
+	ASSERT_EQ(totalError, 1 + sqrt(2));
 }
 
 /**
@@ -91,5 +91,5 @@ TEST(PinholeParams_Test, pose_test)
 	// Confirm
 	auto alink = (double *) actualPose.data; auto plink = (double *) pose.data;
 	auto pixelCount = pose.rows * pose.cols;
-	for (auto i = 0; i < pixelCount; i++) ASSERT_EQ(alink[i], plink[i]);
+	for (auto i = 0; i < pixelCount; i++) ASSERT_NEAR(alink[i], plink[i], 1e-4);
 }

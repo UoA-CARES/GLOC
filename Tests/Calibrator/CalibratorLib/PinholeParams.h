@@ -11,6 +11,10 @@
 #include <iostream>
 using namespace std;
 
+#include <NVLib/PoseUtils.h>
+#include <NVLib/Math2D.h>
+#include <NVLib/Math3D.h>
+
 #include <opencv2/opencv.hpp>
 using namespace cv;
 
@@ -31,7 +35,7 @@ namespace NVL_App
 
 		virtual void SetState(vector<double>& variables);
 
-		Mat GetPoseMatrix( );
+		Mat GetPoseMatrix();
 
 		inline Mat& GetCamera() { return _camera; }
 		inline Vec3d& GetRvec() { return _rvec; }
