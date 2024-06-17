@@ -24,10 +24,11 @@ namespace NVL_App
 		RefineResult() {}
 
 		virtual double CalculateError(GridPoints * points, vector<double>& errors) = 0;
-		virtual void SetError(vector<double>& variables) = 0;
+		virtual void SetState(vector<double>& variables) = 0;
 
 		inline double& GetLastError() { return _lastError; }
 		inline int& GetIterators() { return _iterators; }
+	protected:
 		inline void SetLastError(double value) { _lastError = value; }
 	};
 }

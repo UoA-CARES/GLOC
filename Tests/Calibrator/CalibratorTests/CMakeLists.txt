@@ -17,8 +17,8 @@ add_executable (CalibratorTests
 	Tests/Example_Tests.cpp
 	Tests/GridPoints_Tests.cpp
 	Tests/InitialParams_Tests.cpp
+	Tests/PinholeParams_Tests.cpp
 )
-
 
 # Add link libraries
 target_link_libraries(CalibratorTests CalibratorLib NVLib ${OpenCV_LIBS} OpenSSL::SSL uuid GTest::Main)
