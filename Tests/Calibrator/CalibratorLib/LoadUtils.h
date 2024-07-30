@@ -27,6 +27,6 @@ namespace NVL_App
 	{
 	public:
 		static unique_ptr<BoardParams> LoadBoardParams(NVLib::PathHelper& pathHelper);
-		static unique_ptr<GridPoints> LoadGrid(NVLib::PathHelper& pathHelper, const string& folder, int index);
+		static unique_ptr<GridPoints> LoadGrid(NVLib::PathHelper& pathHelper, const Size& boardSize, const string& folder, int index);
 	};
 }

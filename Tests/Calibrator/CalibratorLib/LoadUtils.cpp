@@ -51,11 +51,34 @@ unique_ptr<BoardParams> LoadUtils::LoadBoardParams(NVLib::PathHelper& pathHelper
 /**
  * @brief Load grid points from disk
  * @param pathHelper Helper for getting the location of files
+ * @param boardSize The size of the board that we are loading
  * @param folder the folder that we are loading from
  * @param index The index of the grid that we are loading
  * @return unique_ptr<GridPoints> Returns a unique_ptr<GridPoints>
  */
-unique_ptr<GridPoints> LoadUtils::LoadGrid(NVLib::PathHelper& pathHelper, const string& folder, int index)
+unique_ptr<GridPoints> LoadUtils::LoadGrid(NVLib::PathHelper& pathHelper, const Size& boardSize, const string& folder, int index)
 {
-	throw runtime_error("Not implemented");
+	auto fileName = stringstream(); fileName << "points_" << setw(4) << setfill('0') << index << ".txt";
+	auto path = pathHelper.GetPath(folder, fileName.str());
+	auto reader = ifstream(path); if (!reader.is_open()) throw runtime_error("Unable to open: " + path);
+
+	auto result = new GridPoints(Size(boardSize.width - 1, boardSize.height - 1));
+
+	for (auto row = 0; row < result->GetGridSize().height; row++) 
+	{
+		for (auto column = 0; column < result->GetGridSize().width; column++) 
+		{
+			auto line = string(); getline(reader, line);
+			if (line == string()) throw runtime_error("Point file does not contain enough entries");
+			auto parts = vector<string>(); NVLib::StringUtils::Split(line, ',', parts);
+			if (parts.size() != 5) throw runtime_error("Input file does not appear to be in the correct format");
+			
+			auto values = vector<double>(); for (auto i = 0; i < parts.size(); i++) values.push_back(NVLib::StringUtils::String2Double(parts[i]));
+			result->Update(Point2i(column, row), Point2d(values[3], values[4]), Point3d(values[0], values[1], values[2]));
+		}
+	}
+
+	reader.close();
+
+	return unique_ptr<GridPoints>(result);
 }

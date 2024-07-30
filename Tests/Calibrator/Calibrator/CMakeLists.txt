@@ -16,7 +16,7 @@ add_executable(Calibrator
 )
 
 # Add link libraries                               
-target_link_libraries(Calibrator CalibratorLib  NVLib ${OpenCV_LIBS} OpenSSL::SSL uuid)
+target_link_libraries(Calibrator CalibratorLib  NVLib ${OpenCV_LIBS} pugixml OpenSSL::SSL uuid)
 
 # Copy Resources across
 add_custom_target(resource_copy ALL

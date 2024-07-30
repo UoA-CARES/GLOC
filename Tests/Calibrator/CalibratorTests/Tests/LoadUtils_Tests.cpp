@@ -39,13 +39,19 @@ TEST(LoadUtils_Test, load_board_params)
  */
 TEST(LoadUtils_Test, load_grid)
 {
-	FAIL() << "Not implemented";
-
 	// Setup
+	auto helper = NVLib::PathHelper("/home/trevor/Research/GLOC/Data", "UnitTest");
+	auto board = LoadUtils::LoadBoardParams(helper);
 
 	// Execute
+	auto grid = LoadUtils::LoadGrid(helper, board->GetBoardSize(), "Points", 0);
 
 	// Confirm
-
-	// Teardown
+	ASSERT_EQ(grid->GetPointCount(), 35);
+	ASSERT_EQ(grid->GetImagePoint(Point2i(0,0)).x, 639.405);
+	ASSERT_EQ(grid->GetImagePoint(Point2i(0,1)).x, 640.826);
+	ASSERT_EQ(grid->GetImagePoint(Point2i(4,6)).y, 596.465);
+	ASSERT_EQ(grid->GetGoalPoint3D(Point2i(0,1)).z, 0);
+	ASSERT_EQ(grid->GetGoalPoint3D(Point2i(1,1)).x, 48);
+	ASSERT_EQ(grid->GetGoalPoint3D(Point2i(0,6)).y, 288);
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+
+<class>
+
+<namespace>NVL_App</namespace>
+<solution>CalibratorLib</solution>
+<name>Calibration</name>
+<description>Container for holding calibration details</description>
+
+<includes>
+    <include name="iostream" namespace="std" local="false" />
+    <include name="opencv2/opencv.hpp" namespace=
+</includes>
+
+<variables>
+    <variable type="" name="" code="" />
+</variables>
+
+<constructors>
+    <constructor type="custom" inline="false">
+        <parameter type="" name="" description="" />
+    </constructor>
+</constructors>
+
+<methods>
+    <method section="" modifiers="" access="" return="" name="" description="" inline="">
+        <parameter type="" name="" description="" />
+    </method>    
+</methods>
+
+<tests>
+    <test name="" description="" exception="false" />
+</tests> 
+
+</class>

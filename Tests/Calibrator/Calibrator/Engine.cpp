@@ -45,5 +45,16 @@ Engine::~Engine()
  */
 void Engine::Run()
 {
-    // TODO: Execution Logic
+    _logger->Log(1, "Loading board parameters");
+    auto board = NVL_App::LoadUtils::LoadBoardParams(*_pathHelper);
+    _logger->Log(1, "Board Size: [%i,%i]", board->GetBoardSize().width, board->GetBoardSize().height);
+
+    _logger->Log(1, "Loading the first grid");
+    auto grid_1 = NVL_App::LoadUtils::LoadGrid(*_pathHelper, board->GetBoardSize(), "Points", 0);
+    _logger->Log(1, "Load completed: %i points", grid_1->GetPointCount());
+
+    _logger->Log(1, "Loading the second grid");
+    auto grid_2 = NVL_App::LoadUtils::LoadGrid(*_pathHelper, board->GetBoardSize(), "Points", 1);
+    _logger->Log(1, "Load completed: %i points", grid_2->GetPointCount());
+
 }
