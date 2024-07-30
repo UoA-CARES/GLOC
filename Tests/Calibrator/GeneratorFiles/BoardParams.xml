@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+
+<class>
+
+<namespace>NVL_App</namespace>
+<solution>CalibratorLib</solution>
+<name>BoardParams</name>
+<description>The set of parameters containing key parameters about the calibration board</description>
+
+<includes>
+    <include name="iostream" namespace="std" local="false" />
+    <include name="opencv2/opencv.hpp" namespace="cv" local="false" />
+</includes>
+
+<variables>
+    <variable type="Size" name="boardSize" code="10" />
+    <variable type="int" name="blockSize" code="10" />
+    <variable type="int" name="markerSize" code="10" />
+    <varaible type="int" name="dictionary" code="10" />
+</variables>
+
+<constructors>
+    <constructor type="auto" inline="true" />
+</constructors>
+
+</class>
