@@ -8,11 +8,14 @@
 
 #pragma once
 
+#include <sstream>
 #include <iostream>
 using namespace std;
 
 #include <opencv2/opencv.hpp>
 using namespace cv;
+
+#include <pugixml.hpp>
 
 #include <NVLib/Path/PathHelper.h>
 #include "BoardParams.h"

@@ -23,7 +23,7 @@ add_executable (CalibratorTests
 
 
 # Add link libraries
-target_link_libraries(CalibratorTests CalibratorLib NVLib ${OpenCV_LIBS} OpenSSL::SSL uuid GTest::Main)
+target_link_libraries(CalibratorTests CalibratorLib NVLib ${OpenCV_LIBS} pugixml OpenSSL::SSL uuid GTest::Main)
 
 # Find the associated unit tests
 gtest_discover_tests(CalibratorTests)

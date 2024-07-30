@@ -21,7 +21,27 @@ using namespace NVL_App;
  */
 unique_ptr<BoardParams> LoadUtils::LoadBoardParams(NVLib::PathHelper& pathHelper)
 {
-	throw runtime_error("Not implemented");
+	auto path = pathHelper.GetPath("Meta", "board.xml");
+
+	auto document = pugi::xml_document();
+	auto success = document.load_file(path.c_str()); if (!success) throw runtime_error("Unable to open file: " + path);
+
+	// Load the board_size
+	auto sizeNode = document.child("opencv_storage").child("board_size");
+	auto sizeValues = sizeNode.text();
+	auto sizeParser = stringstream(sizeValues.as_string()); auto size = Size(); sizeParser >> size.width >> size.height;
+
+	// Load the block_size
+	auto blockSize = document.child("opencv_storage").child("block_size").text().as_int();
+
+	// Load the marker size
+	auto markerSize = document.child("opencv_storage").child("marker_size").text().as_int();
+
+	// Load the dictionary setting
+	auto dictionary = document.child("opencv_storage").child("dictionary").text().as_int();
+
+	// Return the result
+	return unique_ptr<BoardParams>(new BoardParams(size, blockSize, markerSize, dictionary));
 }
 
 //--------------------------------------------------

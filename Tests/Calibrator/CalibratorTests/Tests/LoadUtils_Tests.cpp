@@ -20,15 +20,18 @@ using namespace NVL_App;
  */
 TEST(LoadUtils_Test, load_board_params)
 {
-	FAIL() << "Not implemented";
-
 	// Setup
+	auto helper = NVLib::PathHelper("/home/trevor/Research/GLOC/Data", "UnitTest");
 
 	// Execute
+	auto board = LoadUtils::LoadBoardParams(helper);
 
 	// Confirm
-
-	// Teardown
+	ASSERT_EQ(board->GetBoardSize().width, 6);
+	ASSERT_EQ(board->GetBoardSize().height, 8);
+	ASSERT_EQ(board->GetBlockSize(), 48);
+	ASSERT_EQ(board->GetMarkerSize(), 36);
+	ASSERT_EQ(board->GetDictionary(), 3);
 }
 
 /**

@@ -24,7 +24,7 @@ namespace NVL_App
 		int _markerSize;
 		int _dictionary;
 	public:
-		BoardParams(Size& boardSize, int blockSize, int markerSize, int dictionary) :
+		BoardParams(const Size& boardSize, int blockSize, int markerSize, int dictionary) :
 			_boardSize(boardSize), _blockSize(blockSize), _markerSize(markerSize), _dictionary(dictionary) {}
 
 		inline Size& GetBoardSize() { return _boardSize; }
