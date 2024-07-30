@@ -15,4 +15,5 @@ add_library (CalibratorLib STATIC
 	GridPoints.cpp
 	InitialParams.cpp
 	PinholeParams.cpp
+	LoadUtils.cpp
 )

@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+
+<class>
+
+<namespace>NVL_App</namespace>
+<solution>CalibratorLib</solution>
+<name>LoadUtils</name>
+<description>A utility for loading resources from disk</description>
+
+<includes>
+    <include name="iostream" namespace="std" local="false" />
+    <include name="opencv2/opencv.hpp" namespace="cv" local="false" />
+    <include name="NVLib/Path/PathHelper.h" local="false" />
+    <include name="BoardParams.h" local="true" />
+    <include name="GridPoints.h" local="true" />
+</includes>
+
+<methods>
+
+    <!-- Load Board Params -->
+    <method section="Board Params" modifiers="static" access="public" return="unique_ptr<BoardParams>" name="LoadBoardParams" description="Load the board parameters from disk" inline="false">
+        <parameter type="NVLib::PathHelper&" name="pathHelper" description="Helper for getting the location of files" />
+    </method>
+
+    <!-- Load Grid Points -->
+    <method section="Grid Points" modifiers="static" access="public" return="unique_ptr<GridPoints>" name="LoadGrid" description="Load grid points from disk" inline="false">
+        <parameter type="NVLib::PathHelper&" name="pathHelper" description="Helper for getting the location of files" />        
+        <parameter type="const string&" name="folder" description="the folder that we are loading from" />
+        <parameter type="int" name="index" description="The index of the grid that we are loading" />
+    </method>    
+
+</methods>
+
+<tests>
+    <test name="load_board_params" description="Determine that the loading of board parameters is occuring succesfully" exception="false" />
+    <test name="load_grid" description="Determine that we are able to load a grid correctly" exception="false" />
+</tests> 
+
+</class>
