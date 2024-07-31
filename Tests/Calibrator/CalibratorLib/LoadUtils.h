@@ -20,6 +20,7 @@ using namespace cv;
 #include <NVLib/Path/PathHelper.h>
 #include "BoardParams.h"
 #include "GridPoints.h"
+#include "Calibration.h"
 
 namespace NVL_App
 {
@@ -28,5 +29,6 @@ namespace NVL_App
 	public:
 		static unique_ptr<BoardParams> LoadBoardParams(NVLib::PathHelper& pathHelper);
 		static unique_ptr<GridPoints> LoadGrid(NVLib::PathHelper& pathHelper, const Size& boardSize, const string& folder, int index);
+		static unique_ptr<Calibration> LoadCalibration(NVLib::PathHelper& pathHelper, const string& folder);
 	};
 }

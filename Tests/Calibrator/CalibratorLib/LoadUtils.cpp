@@ -9,7 +9,6 @@
 #include "LoadUtils.h"
 using namespace NVL_App;
 
-
 //--------------------------------------------------
 // Board Params
 //--------------------------------------------------
@@ -81,4 +80,29 @@ unique_ptr<GridPoints> LoadUtils::LoadGrid(NVLib::PathHelper& pathHelper, const 
 	reader.close();
 
 	return unique_ptr<GridPoints>(result);
+}
+
+//--------------------------------------------------
+// Load Calibration
+//--------------------------------------------------
+
+/**
+ * Add the functionality to load calibration data from disk
+ * @param pathHelper The path helper that we are using to perform the loading
+ * @param folder The folder that we are loading from
+ * @return The calibration result
+ */
+unique_ptr<Calibration> LoadUtils::LoadCalibration(NVLib::PathHelper& pathHelper, const string& folder) 
+{
+	auto path = pathHelper.GetPath(folder, "Calibration.xml");
+	auto reader = FileStorage(path, FileStorage::FORMAT_XML | FileStorage::READ);
+	if (!reader.isOpened()) throw runtime_error("Unable to open: " + path);
+
+	auto camera = (Mat)Mat(); reader["camera"] >> camera;
+	auto distortion = (Mat)Mat(); reader["distortion"] >> distortion;
+	auto imageSize = Size(); reader["image_size"] >> imageSize;
+
+	reader.release();
+
+	return unique_ptr<Calibration>(new Calibration(camera, distortion, imageSize));
 }
