@@ -16,4 +16,6 @@ add_library (CalibratorLib STATIC
 	InitialParams.cpp
 	PinholeParams.cpp
 	LoadUtils.cpp
+	HelperUtils.cpp
 )
+

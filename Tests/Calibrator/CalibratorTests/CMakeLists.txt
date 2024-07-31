@@ -19,7 +19,9 @@ add_executable (CalibratorTests
 	Tests/InitialParams_Tests.cpp
 	Tests/PinholeParams_Tests.cpp
 	Tests/LoadUtils_Tests.cpp
+	Tests/HelperUtils_Tests.cpp
 )
+
 
 
 # Add link libraries

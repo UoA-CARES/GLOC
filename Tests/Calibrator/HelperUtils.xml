@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+
+<class>
+
+<namespace>NVL_App</namespace>
+<solution>CalibratorLib</solution>
+<name>HelperUtils</name>
+<description>A library of helper functions for this application</description>
+
+<includes>
+    <include name="iostream" namespace="std" local="false" />
+    <include name="opencv2/opencv.hpp" namespace="cv" local="false" />
+    <include name="Calibration.h" local="true" />
+</includes>
+
+<methods>
+    <method section="Undistort" modifiers="static" access="public" return="unique_ptr<GridPoints>" name="Undistort" description="Remove the distortion from given points" inline="false">
+        <parameter type="Calibration *" name="calibration" description="The calibration that we are dealing with" />
+        <parameter type="GridPoints *" name="points" description="The points that we are undistorting" />
+    </method>    
+
+</methods>
+
+<tests>
+    <test name="distortion_conversion" description="Determine that the distortion removal works as expected" exception="false" />
+</tests> 
+
+</class>
