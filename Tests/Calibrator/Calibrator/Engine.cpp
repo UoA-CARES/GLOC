@@ -57,4 +57,8 @@ void Engine::Run()
     auto grid_2 = NVL_App::LoadUtils::LoadGrid(*_pathHelper, board->GetBoardSize(), "Points", 1);
     _logger->Log(1, "Load completed: %i points", grid_2->GetPointCount());
 
+    _logger->Log(1, "Loading the distortion model from disk");
+    auto dmodel = NVL_App::LoadUtils::LoadCalibration(*_pathHelper, "Distortion");
+    _logger->Log(1, "Distortion: %s", (NVLib::Formatter() << dmodel->GetDistortion().t()).str().c_str());
+
 }
