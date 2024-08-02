@@ -21,7 +21,7 @@ using namespace NVL_App;
 unique_ptr<Settings> LoadUtils::LoadBoardSettings(NVLib::PathHelper * pathHelper)
 {
 	// Build image path
-	auto path = pathHelper->GetPath("Tool_Output", "calibration..txt");
+	auto path = pathHelper->GetPath("Tool_Output", "Calibration..txt");
 
 	// Create a reader
 	auto reader = ifstream(path); if (!reader.is_open()) throw runtime_error("Unable to open: " + path);
