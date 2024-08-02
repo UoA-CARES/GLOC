@@ -9,6 +9,7 @@
 #include <gtest/gtest.h>
 
 #include <CalibratorLib/HelperUtils.h>
+#include <CalibratorLib/LoadUtils.h>
 using namespace NVL_App;
 
 //--------------------------------------------------
@@ -20,13 +21,28 @@ using namespace NVL_App;
  */
 TEST(HelperUtils_Test, distortion_conversion)
 {
-	FAIL() << "Not implemented";
-
 	// Setup
+	auto helper = NVLib::PathHelper("/home/trevor/Research/GLOC/Data", "UnitTest");
+	auto board = LoadUtils::LoadBoardParams(helper);
+	auto calibration = LoadUtils::LoadCalibration(helper, "Distortion");
 
-	// Execute
+	// Load grids
+	auto grid = LoadUtils::LoadGrid(helper, board->GetBoardSize(), "Points", 0);
+	auto expected_grid = LoadUtils::LoadGrid(helper, board->GetBoardSize(), "Distortion", 0);
 
-	// Confirm
+	// Perform the undistortion operation
+	auto actual_grid = HelperUtils::Undistort(calibration.get(), grid.get());
 
-	// Teardown
+	// Confirm that the values are as expected
+	ASSERT_EQ(expected_grid->GetGridSize().width, actual_grid->GetGridSize().width);
+	ASSERT_EQ(expected_grid->GetGridSize().height, actual_grid->GetGridSize().height);
+
+	for (auto row = 0; row < expected_grid->GetGridSize().height; row++) 
+	{
+		for (auto column = 0; column < expected_grid->GetGridSize().width; column++) 
+		{
+			ASSERT_EQ(expected_grid->GetImagePoint(Point2i(column, row)).x, actual_grid->GetImagePoint(Point2i(column, row)).x);
+			ASSERT_EQ(expected_grid->GetImagePoint(Point2i(column, row)).y, actual_grid->GetImagePoint(Point2i(column, row)).y);
+		}
+	}
 }
