@@ -27,10 +27,10 @@ TEST(LoadUtils_Test, load_board_params)
 	auto board = LoadUtils::LoadBoardParams(helper);
 
 	// Confirm
-	ASSERT_EQ(board->GetBoardSize().width, 6);
-	ASSERT_EQ(board->GetBoardSize().height, 8);
-	ASSERT_EQ(board->GetBlockSize(), 48);
-	ASSERT_EQ(board->GetMarkerSize(), 36);
+	ASSERT_EQ(board->GetBoardSize().width, 10);
+	ASSERT_EQ(board->GetBoardSize().height, 7);
+	ASSERT_EQ(board->GetBlockSize(), 25);
+	ASSERT_EQ(board->GetMarkerSize(), 0);
 	ASSERT_EQ(board->GetDictionary(), 3);
 }
 
@@ -47,13 +47,13 @@ TEST(LoadUtils_Test, load_grid)
 	auto grid = LoadUtils::LoadGrid(helper, board->GetBoardSize(), "Points", 0);
 
 	// Confirm
-	ASSERT_EQ(grid->GetPointCount(), 35);
-	ASSERT_EQ(grid->GetImagePoint(Point2i(0,0)).x, 639.405);
-	ASSERT_EQ(grid->GetImagePoint(Point2i(0,1)).x, 640.826);
-	ASSERT_EQ(grid->GetImagePoint(Point2i(4,6)).y, 596.465);
+	ASSERT_EQ(grid->GetPointCount(), 54);
+	ASSERT_EQ(grid->GetImagePoint(Point2i(0,0)).x, 1143.88);
+	ASSERT_EQ(grid->GetImagePoint(Point2i(0,1)).x, 1071.59);
+	ASSERT_EQ(grid->GetImagePoint(Point2i(4,5)).y, 582.715);
 	ASSERT_EQ(grid->GetGoalPoint3D(Point2i(0,1)).z, 0);
-	ASSERT_EQ(grid->GetGoalPoint3D(Point2i(1,1)).x, 48);
-	ASSERT_EQ(grid->GetGoalPoint3D(Point2i(0,6)).y, 288);
+	ASSERT_EQ(grid->GetGoalPoint3D(Point2i(1,1)).x, 25);
+	ASSERT_EQ(grid->GetGoalPoint3D(Point2i(0,5)).y, 125);
 }
 
 /**
@@ -71,17 +71,17 @@ TEST(LoadUtils_Test, load_calibration)
 	auto clink = (double *) calibration->GetCamera().data;
 	ASSERT_EQ(calibration->GetCamera().rows, 3);
 	ASSERT_EQ(calibration->GetCamera().cols, 3);
-	auto cvalues = vector<double> { 2784, 0, 463.999, 0, 2784, 400, 0, 0, 1 };
+	auto cvalues = vector<double> { 6624, 0, 1104.003, 0, 6624, 620.999, 0, 0, 1 };
 	for (auto i = 0; i < cvalues.size(); i++) ASSERT_NEAR(clink[i], cvalues[i], 1e-4);
 
 	// Test Distortion
 	auto dlink = (double *) calibration->GetDistortion().data;
 	ASSERT_EQ(calibration->GetDistortion().rows, 5);
 	ASSERT_EQ(calibration->GetDistortion().cols, 1);
-	auto dvalues = vector<double> { 1.327, -2.605, -0.008, 0.005, -217.438 };
+	auto dvalues = vector<double> { -4.05099, 183.005, -0.032, -0.004, -3698.3929 };
 	for (auto i = 0; i < dvalues.size(); i++) ASSERT_NEAR(dlink[i], dvalues[i], 1e-4);
 
 	// Test Size
-	ASSERT_EQ(calibration->GetImageSize().width, 928);
-	ASSERT_EQ(calibration->GetImageSize().height, 800);
+	ASSERT_EQ(calibration->GetImageSize().width, 2208);
+	ASSERT_EQ(calibration->GetImageSize().height, 1242);
 }

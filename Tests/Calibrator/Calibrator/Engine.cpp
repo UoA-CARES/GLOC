@@ -60,5 +60,4 @@ void Engine::Run()
     _logger->Log(1, "Loading the distortion model from disk");
     auto dmodel = NVL_App::LoadUtils::LoadCalibration(*_pathHelper, "Distortion");
     _logger->Log(1, "Distortion: %s", (NVLib::Formatter() << dmodel->GetDistortion().t()).str().c_str());
-
 }
