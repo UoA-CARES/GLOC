@@ -10,9 +10,9 @@ Utils/PointGen/build/
 Utils/PointConvert/build/
 
 # Data
-Data/**/*.png
-Data/**/*.jpg
-Data/**/*.txt
+# Data/**/*.png
+# Data/**/*.jpg
+# Data/**/*.txt
 Data/**/*.zip
 
 # Tests
