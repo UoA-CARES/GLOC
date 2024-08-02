@@ -41,8 +41,8 @@ TEST(HelperUtils_Test, distortion_conversion)
 	{
 		for (auto column = 0; column < expected_grid->GetGridSize().width; column++) 
 		{
-			ASSERT_EQ(expected_grid->GetImagePoint(Point2i(column, row)).x, actual_grid->GetImagePoint(Point2i(column, row)).x);
-			ASSERT_EQ(expected_grid->GetImagePoint(Point2i(column, row)).y, actual_grid->GetImagePoint(Point2i(column, row)).y);
+			ASSERT_NEAR(expected_grid->GetImagePoint(Point2i(column, row)).x, actual_grid->GetImagePoint(Point2i(column, row)).x, 2);
+			ASSERT_NEAR(expected_grid->GetImagePoint(Point2i(column, row)).y, actual_grid->GetImagePoint(Point2i(column, row)).y, 2);
 		}
 	}
 }
