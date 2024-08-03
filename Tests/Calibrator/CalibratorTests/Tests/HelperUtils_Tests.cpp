@@ -10,7 +10,13 @@
 
 #include <CalibratorLib/HelperUtils.h>
 #include <CalibratorLib/LoadUtils.h>
+#include <CalibratorLib/PinholeParams.h>
 using namespace NVL_App;
+
+//--------------------------------------------------
+// Function Prototypes
+//--------------------------------------------------
+unique_ptr<GridPoints> BuildGrid(const Size& gridSize, double blockSize, PinholeParams& parameters);
 
 //--------------------------------------------------
 // Test Methods
@@ -45,4 +51,55 @@ TEST(HelperUtils_Test, distortion_conversion)
 			ASSERT_NEAR(expected_grid->GetImagePoint(Point2i(column, row)).y, actual_grid->GetImagePoint(Point2i(column, row)).y, 2);
 		}
 	}
+}
+
+/**
+ * Calculate the given reprojection error
+ */
+TEST(HelperUtils_Test, reprojection_error) 
+{
+	// Create the camera parameters
+	auto camera = (Mat)(Mat_<double>(3,3) << 900, 0, 450, 0, 900, 450, 0, 0, 1);
+	auto pose = NVLib::PoseUtils::Vectors2Pose(Vec3d(0.1, -0.03, 0.2), Vec3d(10,20,70));
+	auto parameters = PinholeParams(camera, pose);
+
+	// Generate the associated grid
+	auto grid = BuildGrid(Size(9,7), 25, parameters);
+
+	// Calculate score
+	auto errors = vector<double>(); auto score = parameters.CalculateError(grid.get(), errors);
+
+	// Verify
+	ASSERT_NEAR(score, 0, 1e-4);
+
+}
+
+//--------------------------------------------------
+// Build Grid
+//--------------------------------------------------
+
+/**
+ * Add the functionality to build the associated grid
+ * @param gridSize The size of the grid that we are making
+ * @param blockSize The size of the blocks making up the grid
+ * @param parameters The parameters we are using to construct the 3d Points
+ */
+unique_ptr<GridPoints> BuildGrid(const Size& gridSize, double blockSize, PinholeParams& parameters) 
+{
+	auto result = new GridPoints(gridSize);
+
+	auto invPose = parameters.GetPoseMatrix().inv();
+
+	for (auto row = 0; row < gridSize.height; row++) 
+	{
+		for (auto column = 0; column < gridSize.width; column++) 
+		{
+			auto scenePoint = Point3d(column * blockSize, row * blockSize, 800);
+			auto tscenePoint = NVLib::Math3D::TransformPoint(invPose, scenePoint);
+			auto imagePoint = NVLib::Math3D::Project(parameters.GetCamera(), scenePoint);
+			result->Update(Point2i(column, row), imagePoint, tscenePoint);
+		}
+	}
+
+	return unique_ptr<GridPoints>(result);
 }
