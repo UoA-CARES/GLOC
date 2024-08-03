@@ -29,6 +29,13 @@ set_target_properties(NVLib PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES "${LIBRARY_BASE}/NVLib"
 )
 
+# Add Jarvis
+add_library(JarvisLib STATIC IMPORTED)
+set_target_properties(JarvisLib PROPERTIES
+    IMPORTED_LOCATION "$ENV{HOME}/Research/SiliconArmy/Library/JarvisLib/build/JarvisLib/libJarvisLib.a"
+    INTERFACE_INCLUDE_DIRECTORIES "$ENV{HOME}/Research/SiliconArmy/Library/JarvisLib"
+)
+
 # Add OpenCV to the solution
 find_package( OpenCV REQUIRED)
 include_directories( ${OpenCV_INCLUDE_DIRS} )

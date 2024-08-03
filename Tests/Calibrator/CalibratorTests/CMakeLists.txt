@@ -22,10 +22,8 @@ add_executable (CalibratorTests
 	Tests/HelperUtils_Tests.cpp
 )
 
-
-
 # Add link libraries
-target_link_libraries(CalibratorTests CalibratorLib NVLib ${OpenCV_LIBS} pugixml OpenSSL::SSL uuid GTest::Main)
+target_link_libraries(CalibratorTests CalibratorLib JarvisLib NVLib ${OpenCV_LIBS} pugixml OpenSSL::SSL uuid GTest::Main)
 
 # Find the associated unit tests
 gtest_discover_tests(CalibratorTests)
