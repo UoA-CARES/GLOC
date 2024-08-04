@@ -71,7 +71,6 @@ TEST(HelperUtils_Test, reprojection_error)
 
 	// Verify
 	ASSERT_NEAR(score, 0, 1e-4);
-
 }
 
 //--------------------------------------------------
