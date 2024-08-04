@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+
+<class terminator="true" base="JarvisLib::ProblemBase">
+
+<namespace>NVL_App</namespace>
+<solution>CalibratorLib</solution>
+<name>IntrinsicProblem</name>
+<description>The problem that we want to refine</description>
+
+<includes>
+    <include name="iostream" namespace="std" local="false" />
+    <include name="opencv2/opencv.hpp" namespace="cv" local="false" />
+    <include name="GridProblem *" local="true" />
+    <include name="PinholeParams.h" local="true" />
+</includes>
+
+<variables>
+    <variable type="GridPoint *" name="grid1" code="10" />
+    <variable type="GridPoint *" name="grid2" code="10" />
+</variables>
+
+<constructors>
+    <constructor type="auto" inline="false" />
+</constructors>
+
+<methods>
+    <method section="DataSize" modifiers="virtual" access="public" return="int" name="GetDataSize" description="Get the size of the data that we are processing" inline="false" />
+
+    <method section="Evaluate" modifiers="virtual" access="public" return="double" name="Evaluate" description="Evaluate a particular parameter setup in terms of the grids" inline="false">
+        <parameter type="Mat&" name="parameters" description="The parameters that we are evaluating" />
+        <parameter type="Mat&" name="errors" description="The individual erros associated with each point" />
+    </method>    
+
+</methods>
+
+<tests>
+    <test name="verify_opertion" description="Verify the operation of the Intrinsic Problem" exception="false" />
+</tests> 
+
+</class>

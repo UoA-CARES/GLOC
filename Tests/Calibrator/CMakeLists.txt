@@ -20,7 +20,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(LIBRARY_BASE $ENV{HOME}/Libraries)
 
 # Setup the includes for the libraries
-include_directories("../" "${LIBRARY_BASE}/NVLib")
+include_directories("../" "${LIBRARY_BASE}/NVLib" "${LIBRARY_BASE}/JarvisLib")
 
 # Add the NVLib library to the folder
 add_library(NVLib STATIC IMPORTED)
