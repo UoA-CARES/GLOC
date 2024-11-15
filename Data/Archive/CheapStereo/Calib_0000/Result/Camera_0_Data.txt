@@ -1,0 +1,12 @@
+Camera_0_Intrinsic.txt
+Camera_0_Extrinsic.txt
+1 Camera_0_Image_0.jpg
+1 Camera_0_Points_0.txt
+1 Camera_0_Image_1.jpg
+1 Camera_0_Points_1.txt
+1 Camera_0_Image_2.jpg
+1 Camera_0_Points_2.txt
+1 Camera_0_Image_3.jpg
+1 Camera_0_Points_3.txt
+1 Camera_0_Image_4.jpg
+1 Camera_0_Points_4.txt
