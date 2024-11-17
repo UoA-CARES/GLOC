@@ -1,12 +1,12 @@
 //--------------------------------------------------
-// Implementation of class IntrinsicProblem
+// Implementation of class PinHoleProblem
 //
 // @author: Wild Boar
 //
 // @date: 2024-08-04
 //--------------------------------------------------
 
-#include "IntrinsicProblem.h"
+#include "PinHoleProblem.h"
 using namespace NVL_App;
 
 //--------------------------------------------------
@@ -18,7 +18,7 @@ using namespace NVL_App;
  * @param grid1 Initialize variable <grid1>
  * @param grid2 Initialize variable <grid2>
  */
-IntrinsicProblem::IntrinsicProblem(GridPoints * grid1, GridPoints * grid2) : ProblemBase()
+PinHoleProblem::PinHoleProblem(GridPoints * grid1, GridPoints * grid2) : ProblemBase()
 {
 	_grid1 = grid1;
 	_grid2 = grid2;
@@ -27,7 +27,7 @@ IntrinsicProblem::IntrinsicProblem(GridPoints * grid1, GridPoints * grid2) : Pro
 /**
  * @brief Main Terminator
  */
-IntrinsicProblem::~IntrinsicProblem()
+PinHoleProblem::~PinHoleProblem()
 {
 	// Extra terminational logic
 }
@@ -40,7 +40,7 @@ IntrinsicProblem::~IntrinsicProblem()
  * @brief Get the size of the data that we are processing
  * @return int Returns a int
  */
-int IntrinsicProblem::GetDataSize()
+int PinHoleProblem::GetDataSize()
 {
 	throw runtime_error("Not implemented");
 }
@@ -55,7 +55,7 @@ int IntrinsicProblem::GetDataSize()
  * @param errors The individual erros associated with each point
  * @return double Returns a double
  */
-double IntrinsicProblem::Evaluate(Mat& parameters, Mat& errors)
+double PinHoleProblem::Evaluate(Mat& parameters, Mat& errors)
 {
 	throw runtime_error("Not implemented");
 }

@@ -17,7 +17,5 @@ add_library (CalibratorLib STATIC
 	PinholeParams.cpp
 	LoadUtils.cpp
 	HelperUtils.cpp
-	IntrinsicProblem.cpp
+	PinHoleProblem.cpp
 )
-
-

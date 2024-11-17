@@ -20,9 +20,8 @@ add_executable (CalibratorTests
 	Tests/PinholeParams_Tests.cpp
 	Tests/LoadUtils_Tests.cpp
 	Tests/HelperUtils_Tests.cpp
-	Tests/IntrinsicProblem_Tests.cpp
+	Tests/PinHoleProblem_Tests.cpp
 )
-
 
 # Add link libraries
 target_link_libraries(CalibratorTests CalibratorLib JarvisLib NVLib ${OpenCV_LIBS} pugixml OpenSSL::SSL uuid GTest::Main)

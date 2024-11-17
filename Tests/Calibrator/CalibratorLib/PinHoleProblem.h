@@ -21,14 +21,14 @@ using namespace cv;
 
 namespace NVL_App
 {
-	class IntrinsicProblem : public NVL_AI::ProblemBase
+	class PinHoleProblem : public NVL_AI::ProblemBase
 	{
 	private:
 		GridPoints * _grid1;
 		GridPoints * _grid2;
 	public:
-		IntrinsicProblem(GridPoints * grid1, GridPoints * grid2);
-		~IntrinsicProblem();
+		PinHoleProblem(GridPoints * grid1, GridPoints * grid2);
+		~PinHoleProblem();
 
 		virtual int GetDataSize();
 		virtual double Evaluate(Mat& parameters, Mat& errors);

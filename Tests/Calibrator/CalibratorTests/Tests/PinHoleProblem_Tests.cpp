@@ -8,7 +8,7 @@
 
 #include <gtest/gtest.h>
 
-#include <CalibratorLib/IntrinsicProblem.h>
+#include <CalibratorLib/PinHoleProblem.h>
 using namespace NVL_App;
 
 //--------------------------------------------------
