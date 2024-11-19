@@ -16,6 +16,8 @@ using namespace cv;
 
 #include <JarvisLib/Solver/ProblemBase.h>
 
+#include <NVLib/PoseUtils.h>
+
 #include "GridPoints.h"
 #include "PinholeParams.h"
 
@@ -24,16 +26,19 @@ namespace NVL_App
 	class PinHoleProblem : public NVL_AI::ProblemBase
 	{
 	private:
-		GridPoints * _grid1;
-		GridPoints * _grid2;
+		GridPoints * _grid_1;
+		GridPoints * _grid_2;
 	public:
-		PinHoleProblem(GridPoints * grid1, GridPoints * grid2);
+		PinHoleProblem(GridPoints * grid_1, GridPoints * grid_2);
 		~PinHoleProblem();
 
 		virtual int GetDataSize();
 		virtual double Evaluate(Mat& parameters, Mat& errors);
 
-		inline GridPoints * GetGrid1() { return _grid1; }
-		inline GridPoints * GetGrid2() { return _grid2; }
+		inline GridPoints * GetGrid1() { return _grid_1; }
+		inline GridPoints * GetGrid2() { return _grid_2; }
+	private:
+		Mat GetCamera(Mat& parameters);
+		Mat GetPose(Mat& parameters, int index);
 	};
 }

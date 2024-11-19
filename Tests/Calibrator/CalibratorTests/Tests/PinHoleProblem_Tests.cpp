@@ -40,8 +40,8 @@ TEST(PinHoleProblem_Test, verify_opertion)
 	auto problem = PinHoleProblem(grid_1.get(), grid_2.get());
 
 	//Calculate score
-	auto errors = vector<double>(); auto score = problem.Evaluate()
+	auto errors = (Mat)Mat(); auto score = problem.Evaluate(parameters, errors);
 
 	// Verify
-	//ASSERT_NEAR(score, 0, 1e-4);
+	ASSERT_NEAR(score, 0, 1e-4);
 }
