@@ -62,22 +62,6 @@ double PinholeParams::CalculateError(GridPoints * points, vector<double>& errors
 }
 
 //--------------------------------------------------
-// State
-//--------------------------------------------------
-
-/**
- * @brief Set the state as a vector
- * @param variables The variables with we are adding
- */
-void PinholeParams::SetState(vector<double>& variables)
-{
-	auto clink = (double *) _camera.data;
-	clink[0] = variables[0]; clink[4] = variables[1];
-	_rvec = Vec3d(variables[2], variables[3], variables[4]);
-	_tvec = Vec3d(variables[5], variables[6], variables[7]);
-}
-
-//--------------------------------------------------
 // Pose
 //--------------------------------------------------
 

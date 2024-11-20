@@ -14,13 +14,9 @@ include_directories("../")
 
 # Create the executable
 add_executable (CalibratorTests
-	Tests/Example_Tests.cpp
 	Tests/GridPoints_Tests.cpp
-	Tests/InitialParams_Tests.cpp
-	Tests/PinholeParams_Tests.cpp
 	Tests/LoadUtils_Tests.cpp
 	Tests/HelperUtils_Tests.cpp
-	Tests/PinHoleProblem_Tests.cpp
 )
 
 # Add link libraries

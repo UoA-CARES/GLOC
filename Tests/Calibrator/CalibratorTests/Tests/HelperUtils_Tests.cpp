@@ -10,7 +10,6 @@
 
 #include <CalibratorLib/HelperUtils.h>
 #include <CalibratorLib/LoadUtils.h>
-#include <CalibratorLib/PinholeParams.h>
 using namespace NVL_App;
 
 #include "../Helpers/TestUtils.h"

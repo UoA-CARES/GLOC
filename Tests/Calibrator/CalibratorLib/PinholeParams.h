@@ -19,11 +19,10 @@ using namespace std;
 using namespace cv;
 
 #include "GridPoints.h"
-#include "RefineResult.h"
 
 namespace NVL_App
 {
-	class PinholeParams : public RefineResult
+	class PinholeParams
 	{
 	private:
 		Mat _camera;
@@ -32,8 +31,7 @@ namespace NVL_App
 	public:
 		PinholeParams(Mat camera, Mat pose);
 
-		virtual double CalculateError(GridPoints * points, vector<double>& errors) override;
-		virtual void SetState(vector<double>& variables) override;
+		double CalculateError(GridPoints * points, vector<double>& errors);
 
 		Mat GetPoseMatrix();
 
