@@ -1,6 +1,17 @@
 # Diary Notes #
 
-**Diary Nodes**
+**20 November 2024**
+
+I am getting back into this thing after a busy year - with too little attention given to this project. So what needs to be done?
+
+* I am starting to restore the **Calibrator** using the *Zhang* approach. The **Calibrator** takes in *distortion free* points and attempts to find reasonable calibration parameters from this.
+* I then want to add a quick implementation of my point clicker - simply because this is a nice too and I will probably add this to my vision tools library as well.
+* Then I want to revisit my distortion estimator as well - I think that this could benefit from a machine learning approach to solving the problem.
+* Document the experiments and write a Journal paper of the work.
+
+Note that I also need to develop a database of distortion parameters - both synthetic and real and then I need to start working on "learning" how to solve these.
+
+**The main innovation of this work is the distortion estimator - and so once I have finished this work I will be able to publish**. 
 
 **18 April 2024**
 
