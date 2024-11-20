@@ -51,9 +51,10 @@ double PinholeParams::CalculateError(GridPoints * points, vector<double>& errors
 			auto pose = GetPoseMatrix();
 			auto tscenePoint = NVLib::Math3D::TransformPoint(pose, scenePoint);
 
-			auto expected = NVLib::Math3D::Project(_camera, tscenePoint);
-			auto error = NVLib::Math2D::GetDistance(imagePoint, expected);
+			auto actual = NVLib::Math3D::Project(_camera, tscenePoint);
+			auto error = NVLib::Math2D::GetDistance(imagePoint, actual);
 			result += error; errors.push_back(error);
+			
 		}
 	}
 

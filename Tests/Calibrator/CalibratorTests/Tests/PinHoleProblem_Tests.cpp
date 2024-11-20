@@ -6,10 +6,12 @@
 // @date: 2024-08-04
 //--------------------------------------------------
 
+#include <JarvisLib/Solver/LMFinder.h>
+#undef min
+
 #include <gtest/gtest.h>
 
 #include <CalibratorLib/PinHoleProblem.h>
-using namespace NVL_App;
 
 #include "../Helpers/TestUtils.h"
 

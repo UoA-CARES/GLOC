@@ -63,6 +63,8 @@ double PinHoleProblem::Evaluate(Mat& parameters, Mat& errors)
 	auto pose_2 = GetPose(parameters, 1);
 
 	// Testing
+	cout << "-----------------------------------------" << endl;
+	cout << "PARAMS: " << parameters.t() << endl;
 	cout << "CAMERA: " << camera << endl << endl;
 	cout << "POSE_1: " << pose_1 << endl << endl;
 	cout << "POSE_2: " << pose_2 << endl << endl;
@@ -79,8 +81,12 @@ double PinHoleProblem::Evaluate(Mat& parameters, Mat& errors)
 	for (auto error : errors_1) errors.push_back(error);
 	for (auto error : errors_2) errors.push_back(error);
 
+	// determine the final errors
+	auto totalError = score_1 + score_2;
+	cout << "ERROR: " << totalError << endl;
+
 	// Return the error score
-	return score_1 + score_2;
+	return totalError;
 }
 
 /**

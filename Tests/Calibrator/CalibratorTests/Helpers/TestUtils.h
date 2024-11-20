@@ -45,7 +45,7 @@ public:
         {
             for (auto column = 0; column < gridSize.width; column++) 
             {
-                auto scenePoint = Point3d(column * blockSize, row * blockSize, 800);
+                auto scenePoint = Point3d(column * blockSize, row * blockSize, 1);
                 auto tscenePoint = NVLib::Math3D::TransformPoint(pose, scenePoint);
                 auto imagePoint = NVLib::Math3D::Project(parameters.GetCamera(), tscenePoint);
                 result->Update(Point2i(column, row), imagePoint, scenePoint);
